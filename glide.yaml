@@ -1,0 +1,11 @@
+package: github.com/rai-project/image
+import:
+- package: github.com/bamiaux/rez
+- package: github.com/opentracing/opentracing-go
+  version: ~1.0.2
+- package: github.com/pkg/errors
+  version: ~0.8.0
+- package: github.com/rai-project/config
+- package: github.com/rai-project/logger
+- package: github.com/sirupsen/logrus
+  version: ^1.0.0
