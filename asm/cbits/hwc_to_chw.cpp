@@ -1,6 +1,6 @@
 
-extern "C" int rgb_hwc_to_chw(float *output, float *input, int height,
-                              int width) {
+static inline int hwc_to_chw(float *output, float *input, int height,
+                             int width) {
   float *rOutputPlane = &output[0 * width * height];
   float *bOutputPlane = &output[1 * width * height];
   float *gOutputPlane = &output[2 * width * height];
