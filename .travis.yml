@@ -93,8 +93,8 @@ install:
   - find vendor -type f -exec sed -i 's/Sirupsen/sirupsen/g' {} +
   - go build
 script:
-  - diff -u <(echo -n) <(gofmt -s -d ./)
-  - diff -u <(echo -n) <(go vet ./)
-  - diff -u <(echo -n) <(golint ./)
+  - diff -u <(echo -n) <(gofmt -s -d $(glide novendor))
+  - diff -u <(echo -n) <(go vet $(glide novendor))
+  - diff -u <(echo -n) <(golint $(glide novendor))
 after_script:
   - go test -race -v $(glide novendor)
