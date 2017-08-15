@@ -4,7 +4,7 @@
 typedef float float3 __attribute__((ext_vector_type(3)));
 #define ROUND_DOWN(x, s) ((x) & ~((s)-1))
 
-#if 0
+#if 1
 extern "C" void Hwc2Cwh(float *output, const float *input0, const int height,
                         const int width) {
   const int channels = 3;
