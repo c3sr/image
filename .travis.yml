@@ -53,6 +53,9 @@ cache:
 
 before_install:
   - go get github.com/klauspost/asmfmt/cmd/asmfmt
+  - go get github.com/minio/c2goasm
+  - go get github.com/minio/asm2plan9s
+
 
 before_install:
   - ./travis-install-libjpeg-turbo.sh "$TURBO_VER"
