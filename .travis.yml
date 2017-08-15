@@ -10,10 +10,11 @@ dist: trusty
 sudo: false
 
 env:
-  - LIBVIPS=master
-  - TURBO_VER="1.5.2"
-  - CGO_LDFLAGS="-L/tmp/libjpeg-turbo/lib64" CGO_CPPFLAGS="-I/tmp/libjpeg-turbo/include"
-  - LD_LIBRARY_PATH="/tmp/libjpeg-turbo/lib64"
+  global:
+    - LIBVIPS=master
+    - TURBO_VER="1.5.2"
+    - CGO_LDFLAGS="-L/tmp/libjpeg-turbo/lib64" CGO_CPPFLAGS="-I/tmp/libjpeg-turbo/include"
+    - LD_LIBRARY_PATH="/tmp/libjpeg-turbo/lib64"
 
 
 addons:
