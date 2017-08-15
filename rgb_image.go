@@ -3,6 +3,10 @@ package image
 import (
 	"image"
 	"image/color"
+
+	context "golang.org/x/net/context"
+
+	"github.com/pkg/errors"
 )
 
 // RGBImage is an in-memory image whose At method returns RGB values.
@@ -37,7 +41,7 @@ func (p *RGBImage) RGBAt(x, y int) RGB {
 // PixOffset returns the index of the first element of Pix that corresponds to
 // the pixel at (x, y).
 func (p *RGBImage) PixOffset(x, y int) int {
-	return (y-p.Rect.Min.Y)*p.Stride + (x-p.Rect.Min.X)*4
+	return (y-p.Rect.Min.Y)*p.Stride + (x-p.Rect.Min.X)*3
 }
 
 func (p *RGBImage) Set(x, y int, c color.Color) {
@@ -79,22 +83,56 @@ func (p *RGBImage) SubImage(r image.Rectangle) Image {
 	}
 }
 
-// Opaque scans the entire image and reports whether it is fully opaque.
-func (p *RGBImage) Opaque() bool {
-	if p.Rect.Empty() {
-		return true
+func (p *RGBImage) fillFromRGBAImage(ctx context.Context, rgbaImage *image.RGBA) error {
+	if p.Bounds() != rgbaImage.Bounds() {
+		return errors.Errorf("the bounds %v and %v did not match", p.Bounds(), rgbaImage.Bounds())
 	}
-	i0, i1 := 3, p.Rect.Dx()*4
-	for y := p.Rect.Min.Y; y < p.Rect.Max.Y; y++ {
-		for i := i0; i < i1; i += 4 {
-			if p.Pix[i] != 0xff {
-				return false
-			}
+
+	width := rgbaImage.Bounds().Dx()
+	height := rgbaImage.Bounds().Dy()
+	stride := rgbaImage.Stride
+
+	rgbaImagePixels := rgbaImage.Pix
+	rgbImagePixels := p.Pix
+	for y := 0; y < height; y++ {
+		rgbaOffset := y * stride
+		rgbOffset := y * width
+		for x := 0; x < width; x++ {
+			rgbImagePixels[rgbOffset+0] = float32(rgbaImagePixels[rgbaOffset+0])
+			rgbImagePixels[rgbOffset+1] = float32(rgbaImagePixels[rgbaOffset+1])
+			rgbImagePixels[rgbOffset+2] = float32(rgbaImagePixels[rgbaOffset+2])
+			rgbaOffset += 4
+			rgbOffset += 3
 		}
-		i0 += p.Stride
-		i1 += p.Stride
 	}
-	return true
+
+	return nil
+}
+
+func (p *RGBImage) fillFromNRGBAImage(ctx context.Context, nrgbaImage *image.NRGBA) error {
+	if p.Bounds() != nrgbaImage.Bounds() {
+		return errors.Errorf("the bounds %v and %v did not match", p.Bounds(), nrgbaImage.Bounds())
+	}
+
+	width := nrgbaImage.Bounds().Dx()
+	height := nrgbaImage.Bounds().Dy()
+	stride := nrgbaImage.Stride
+
+	nrgbaImagePixels := nrgbaImage.Pix
+	rgbImagePixels := p.Pix
+	for y := 0; y < height; y++ {
+		nrgbaOffset := y * stride
+		rgbOffset := y * width
+		for x := 0; x < width; x++ {
+			rgbImagePixels[rgbOffset+0] = float32(nrgbaImagePixels[nrgbaOffset+0])
+			rgbImagePixels[rgbOffset+1] = float32(nrgbaImagePixels[nrgbaOffset+1])
+			rgbImagePixels[rgbOffset+2] = float32(nrgbaImagePixels[nrgbaOffset+2])
+			nrgbaOffset += 4
+			rgbOffset += 3
+		}
+	}
+
+	return nil
 }
 
 // NewRGBImage returns a new RGBImage image with the given bounds.

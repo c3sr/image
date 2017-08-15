@@ -16,6 +16,9 @@ env:
   - LIBVIPS=8.4.5
   - LIBVIPS=8.5.6
   - LIBVIPS=master
+  - TURBO_VER=""
+  - TURBO_VER="1.5.2" CGO_LDFLAGS="-L/tmp/libjpeg-turbo/lib64" CGO_CPPFLAGS="-I/tmp/libjpeg-turbo/include" LD_LIBRARY_PATH="/tmp/libjpeg-turbo/lib64"
+
 
 matrix:
   allow_failures:
@@ -47,6 +50,9 @@ cache:
   apt:
   directories:
     - $HOME/libvips
+
+before_install:
+  - ./travis-install-libjpeg-turbo.sh "$TURBO_VER"
 
 # VIPS 8.3.3 requires Poppler 0.30 which is not released on Trusty.
 before_install:

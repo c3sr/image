@@ -1,8 +1,11 @@
 package image
 
 import (
+	"context"
 	"image"
 	"image/color"
+
+	"github.com/pkg/errors"
 )
 
 // BGRImage is an in-memory image whose At method returns RGB values.
@@ -37,7 +40,7 @@ func (p *BGRImage) BGRAt(x, y int) BGR {
 // PixOffset returns the index of the first element of Pix that corresponds to
 // the pixel at (x, y).
 func (p *BGRImage) PixOffset(x, y int) int {
-	return (y-p.Rect.Min.Y)*p.Stride + (x-p.Rect.Min.X)*4
+	return (y-p.Rect.Min.Y)*p.Stride + (x-p.Rect.Min.X)*3
 }
 
 func (p *BGRImage) Set(x, y int, c color.Color) {
@@ -79,22 +82,56 @@ func (p *BGRImage) SubImage(r image.Rectangle) Image {
 	}
 }
 
-// Opaque scans the entire image and reports whether it is fully opaque.
-func (p *BGRImage) Opaque() bool {
-	if p.Rect.Empty() {
-		return true
+func (p *BGRImage) fillFromRGBAImage(ctx context.Context, rgbaImage *image.RGBA) error {
+	if p.Bounds() != rgbaImage.Bounds() {
+		return errors.Errorf("the bounds %v and %v did not match", p.Bounds(), rgbaImage.Bounds())
 	}
-	i0, i1 := 3, p.Rect.Dx()*4
-	for y := p.Rect.Min.Y; y < p.Rect.Max.Y; y++ {
-		for i := i0; i < i1; i += 4 {
-			if p.Pix[i] != 0xff {
-				return false
-			}
+
+	width := rgbaImage.Bounds().Dx()
+	height := rgbaImage.Bounds().Dy()
+	stride := rgbaImage.Stride
+
+	rgbaImagePixels := rgbaImage.Pix
+	bgrImagePixels := p.Pix
+	for y := 0; y < height; y++ {
+		rgbaOffset := y * stride
+		bgrOffset := y * width
+		for x := 0; x < width; x++ {
+			bgrImagePixels[bgrOffset+0] = float32(rgbaImagePixels[rgbaOffset+2])
+			bgrImagePixels[bgrOffset+1] = float32(rgbaImagePixels[rgbaOffset+1])
+			bgrImagePixels[bgrOffset+2] = float32(rgbaImagePixels[rgbaOffset+0])
+			rgbaOffset += 4
+			bgrOffset += 3
 		}
-		i0 += p.Stride
-		i1 += p.Stride
 	}
-	return true
+
+	return nil
+}
+
+func (p *BGRImage) fillFromNRGBAImage(ctx context.Context, nrgbaImage *image.NRGBA) error {
+	if p.Bounds() != nrgbaImage.Bounds() {
+		return errors.Errorf("the bounds %v and %v did not match", p.Bounds(), nrgbaImage.Bounds())
+	}
+
+	width := nrgbaImage.Bounds().Dx()
+	height := nrgbaImage.Bounds().Dy()
+	stride := nrgbaImage.Stride
+
+	nrgbaImagePixels := nrgbaImage.Pix
+	bgrImagePixels := p.Pix
+	for y := 0; y < height; y++ {
+		nrgbaOffset := y * stride
+		bgrOffset := y * width
+		for x := 0; x < width; x++ {
+			bgrImagePixels[bgrOffset+0] = float32(nrgbaImagePixels[nrgbaOffset+2])
+			bgrImagePixels[bgrOffset+1] = float32(nrgbaImagePixels[nrgbaOffset+1])
+			bgrImagePixels[bgrOffset+2] = float32(nrgbaImagePixels[nrgbaOffset+0])
+			nrgbaOffset += 4
+			bgrOffset += 3
+		}
+	}
+
+	return nil
 }
 
 // NewBGRImage returns a new BGRImage image with the given bounds.

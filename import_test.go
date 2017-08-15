@@ -15,8 +15,14 @@ var (
 	bananaImagePath  = filepath.Join(sourcepath.MustAbsoluteDir(), "_fixtures", "banana.png")
 )
 
-func TestImport(t *testing.T) {
+func TestImport1(t *testing.T) {
 	img, err := read(context.Background(), chickenImagePath, Width(10), Height(10))
+	assert.NoError(t, err)
+	assert.NotEmpty(t, img)
+}
+
+func TestImport2(t *testing.T) {
+	img, err := read(context.Background(), bananaImagePath, Width(10), Height(10))
 	assert.NoError(t, err)
 	assert.NotEmpty(t, img)
 }

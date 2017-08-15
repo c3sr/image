@@ -21,7 +21,7 @@ func (c RGB) RGBA() (r, g, b, a uint32) {
 	g |= g << 8
 	b = uint32(c.B)
 	b |= b << 8
-	a = 0
+	a = uint32(0xFFFF)
 	return
 }
 

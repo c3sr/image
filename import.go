@@ -25,6 +25,9 @@ func read(ctx context.Context, filePath string, opts ...Option) (Image, error) {
 	for _, o := range opts {
 		o(options)
 	}
+
+	ctx = context.WithValue(ctx, "options", options)
+
 	buffer, err := bimg.Read(filePath)
 	if err != nil {
 		return nil, errors.Wrapf(err, "unable to read %s image file", filePath)
@@ -63,48 +66,80 @@ func read(ctx context.Context, filePath string, opts ...Option) (Image, error) {
 	imageType := image.Type()
 	decoder, ok := imageFormatDecoders[imageType]
 	if !ok {
-		return nil, errors.Errorf("unsuported image format. unable to find decoder %s in the image format decoder list", imageType)
+		return nil, errors.Errorf("unsupported image format. "+
+			"unable to find decoder %s in the image format decoder list", imageType)
 	}
 
 	buf := bytes.NewBuffer(image.Image())
-	return decodeAsRGBImage(ctx, decoder, buf)
+	return decodeReader(ctx, decoder, buf)
 }
 
-func decodeAsRGBImage(ctx context.Context, decoder func(io.Reader) (image.Image, error), reader io.Reader) (*RGBImage, error) {
+func decodeReader(ctx context.Context, decoder func(io.Reader) (image.Image, error), reader io.Reader) (Image, error) {
+
 	img, err := decoder(reader)
 	if err != nil {
 		return nil, errors.Wrapf(err, "unable to read %s as a jpeg image", ctx.Value("filePath"))
 	}
+
 	model := img.ColorModel()
-	if model != color.RGBAModel {
-		return nil, errors.New("expecting jpeg image to be in RGBA fromat")
+
+	if model == color.NRGBAModel {
+		if rgbaImage, ok := img.(*image.NRGBA); ok {
+			return fromNRGBA(ctx, rgbaImage)
+		}
+		return nil, errors.New("unable to cast to an nrgba image")
 	}
-	rgbaImage, ok := img.(*image.RGBA)
-	if !ok {
+
+	if model == color.RGBAModel {
+		if rgbaImage, ok := img.(*image.RGBA); ok {
+			return fromRGBA(ctx, rgbaImage)
+		}
 		return nil, errors.New("unable to cast to an rgba image")
 	}
 
-	return fromRGBAImage(ctx, rgbaImage)
+	return nil, errors.New("expecting image to be in RGBA or NRGBA fromat")
 }
 
-func fromRGBAImage(ctx context.Context, rgbaImage *image.RGBA) (*RGBImage, error) {
-	rgbImage := NewRGBImage(rgbaImage.Bounds())
-
-	width := rgbaImage.Bounds().Dx()
-	height := rgbaImage.Bounds().Dy()
-	stride := rgbaImage.Stride
-
-	rgbaImagePixels := rgbaImage.Pix
-	rgbImagePixels := rgbImage.Pix
-	for y := 0; y < height; y++ {
-		for x := 0; x < width; x++ {
-			rgbaOffset := y*stride + x*4
-			rgbOffset := 3 * (y*width + x)
-			rgbImagePixels[rgbOffset+0] = float32(rgbaImagePixels[rgbaOffset+0])
-			rgbImagePixels[rgbOffset+1] = float32(rgbaImagePixels[rgbaOffset+1])
-			rgbImagePixels[rgbOffset+2] = float32(rgbaImagePixels[rgbaOffset+2])
-		}
+func fromNRGBA(ctx context.Context, nrgbaImage *image.NRGBA) (Image, error) {
+	options, ok := ctx.Value("options").(*Options)
+	if !ok {
+		return nil, errors.New("expecting options to be passed in context")
 	}
+	switch options.mode {
+	case RGBMode:
+		rgbImage := NewRGBImage(nrgbaImage.Bounds())
+		if err := rgbImage.fillFromNRGBAImage(ctx, nrgbaImage); err != nil {
+			return nil, err
+		}
+		return rgbImage, nil
+	case BGRMode:
+		bgrImage := NewBGRImage(nrgbaImage.Bounds())
+		if err := bgrImage.fillFromNRGBAImage(ctx, nrgbaImage); err != nil {
+			return nil, err
+		}
+		return bgrImage, nil
+	}
+	return nil, errors.Errorf("invalid image mode %v", options.mode)
+}
 
-	return rgbImage, nil
+func fromRGBA(ctx context.Context, rgbaImage *image.RGBA) (Image, error) {
+	options, ok := ctx.Value("options").(*Options)
+	if !ok {
+		return nil, errors.New("expecting options to be passed in context")
+	}
+	switch options.mode {
+	case RGBMode:
+		rgbImage := NewRGBImage(rgbaImage.Bounds())
+		if err := rgbImage.fillFromRGBAImage(ctx, rgbaImage); err != nil {
+			return nil, err
+		}
+		return rgbImage, nil
+	case BGRMode:
+		bgrImage := NewBGRImage(rgbaImage.Bounds())
+		if err := bgrImage.fillFromRGBAImage(ctx, rgbaImage); err != nil {
+			return nil, err
+		}
+		return bgrImage, nil
+	}
+	return nil, errors.Errorf("invalid image mode %v", options.mode)
 }
