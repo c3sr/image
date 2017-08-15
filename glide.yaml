@@ -1,6 +1,10 @@
 package: github.com/rai-project/image
 import:
+- package: github.com/Unknwon/com
+  version: ~1.0.0
 - package: github.com/bamiaux/rez
+- package: github.com/k0kubun/pp
+  version: ~2.3.0
 - package: github.com/opentracing/opentracing-go
   version: ~1.0.2
 - package: github.com/pkg/errors
@@ -9,3 +13,10 @@ import:
 - package: github.com/rai-project/logger
 - package: github.com/sirupsen/logrus
   version: ^1.0.0
+- package: gopkg.in/h2non/bimg.v1
+  version: ~1.0.10
+- package: github.com/GeertJohan/go-sourcepath
+- package: github.com/stretchr/testify
+  version: ~1.1.4
+  subpackages:
+  - assert
