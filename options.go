@@ -1,10 +1,10 @@
 package image
 
 type Options struct {
-	width      int
-	height     int
-	channels   int
-	interlaced bool
+	width    int
+	height   int
+	channels int
+	mode     mode
 }
 
 type Option func(o *Options)
@@ -27,12 +27,14 @@ func Channels(ii int) Option {
 	}
 }
 
-func Interlaced(bb bool) Option {
+func Mode(mode mode) Option {
 	return func(o *Options) {
-		o.interlaced = bb
+		o.mode = mode
 	}
 }
 
 func NewOptions() *Options {
-	return &Options{}
+	return &Options{
+		mode: RGBMode,
+	}
 }

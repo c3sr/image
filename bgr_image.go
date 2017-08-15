@@ -20,6 +20,8 @@ func (p *BGRImage) ColorModel() color.Model { return BGRModel }
 
 func (p *BGRImage) Bounds() image.Rectangle { return p.Rect }
 
+func (p *BGRImage) Mode() mode { return BGRMode }
+
 func (p *BGRImage) At(x, y int) color.Color {
 	return p.BGRAt(x, y)
 }

@@ -15,6 +15,10 @@ func (r Raw) ColorModel() color.Model {
 	return RGBModel
 }
 
+func (r Raw) Mode() mode {
+	return r.options.mode
+}
+
 // Bounds returns the domain for which At can return non-zero color.
 // The bounds do not necessarily contain the point (0, 0).
 func (r Raw) Bounds() image.Rectangle {

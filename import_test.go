@@ -4,6 +4,8 @@ import (
 	"path/filepath"
 	"testing"
 
+	context "golang.org/x/net/context"
+
 	sourcepath "github.com/GeertJohan/go-sourcepath"
 	"github.com/stretchr/testify/assert"
 )
@@ -14,7 +16,7 @@ var (
 )
 
 func TestImport(t *testing.T) {
-	img, err := read(chickenImagePath, Width(10), Height(10))
+	img, err := read(context.Background(), chickenImagePath, Width(10), Height(10))
 	assert.NoError(t, err)
 	assert.NotEmpty(t, img)
 }

@@ -3,13 +3,21 @@
 package image
 
 import (
+	"bytes"
+	"image"
+	"image/color"
+	"io"
+
+	context "golang.org/x/net/context"
+
 	"github.com/Unknwon/com"
-	"github.com/k0kubun/pp"
 	"github.com/pkg/errors"
 	bimg "gopkg.in/h2non/bimg.v1"
 )
 
-func read(filePath string, opts ...Option) (*Image, error) {
+func read(ctx context.Context, filePath string, opts ...Option) (Image, error) {
+	ctx = context.WithValue(ctx, "filePath", filePath)
+
 	if !com.IsFile(filePath) {
 		return nil, errors.Errorf("file %s not found while importing image", filePath)
 	}
@@ -41,18 +49,62 @@ func read(filePath string, opts ...Option) (*Image, error) {
 		processOptions.Width = newWidth
 		processOptions.Height = newHeight
 		processOptions.Force = true
+		processOptions.Interpolator = bimg.Bilinear
 	}
-	if options.interlaced {
-		processOptions.Interlace = options.interlaced
-	}
+
+	processOptions.Type = bimg.PNG
+	processOptions.Interpretation = bimg.InterpretationSRGB
 
 	_, err = image.Process(processOptions)
 	if err != nil {
 		return nil, errors.Wrap(err, "failed to process image")
 	}
 
-	pp.Println(len(image.Image()))
+	imageType := image.Type()
+	decoder, ok := imageFormatDecoders[imageType]
+	if !ok {
+		return nil, errors.Errorf("unsuported image format. unable to find decoder %s in the image format decoder list", imageType)
+	}
 
-	return nil, nil
+	buf := bytes.NewBuffer(image.Image())
+	return decodeAsRGBImage(ctx, decoder, buf)
+}
 
+func decodeAsRGBImage(ctx context.Context, decoder func(io.Reader) (image.Image, error), reader io.Reader) (*RGBImage, error) {
+	img, err := decoder(reader)
+	if err != nil {
+		return nil, errors.Wrapf(err, "unable to read %s as a jpeg image", ctx.Value("filePath"))
+	}
+	model := img.ColorModel()
+	if model != color.RGBAModel {
+		return nil, errors.New("expecting jpeg image to be in RGBA fromat")
+	}
+	rgbaImage, ok := img.(*image.RGBA)
+	if !ok {
+		return nil, errors.New("unable to cast to an rgba image")
+	}
+
+	return fromRGBAImage(ctx, rgbaImage)
+}
+
+func fromRGBAImage(ctx context.Context, rgbaImage *image.RGBA) (*RGBImage, error) {
+	rgbImage := NewRGBImage(rgbaImage.Bounds())
+
+	width := rgbaImage.Bounds().Dx()
+	height := rgbaImage.Bounds().Dy()
+	stride := rgbaImage.Stride
+
+	rgbaImagePixels := rgbaImage.Pix
+	rgbImagePixels := rgbImage.Pix
+	for y := 0; y < height; y++ {
+		for x := 0; x < width; x++ {
+			rgbaOffset := y*stride + x*4
+			rgbOffset := 3 * (y*width + x)
+			rgbImagePixels[rgbOffset+0] = float32(rgbaImagePixels[rgbaOffset+0])
+			rgbImagePixels[rgbOffset+1] = float32(rgbaImagePixels[rgbaOffset+1])
+			rgbImagePixels[rgbOffset+2] = float32(rgbaImagePixels[rgbaOffset+2])
+		}
+	}
+
+	return rgbImage, nil
 }

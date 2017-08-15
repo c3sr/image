@@ -6,8 +6,9 @@ import (
 
 type Image interface {
 	image.Image
+	Mode() mode
 }
 
-func New(s string) (image.Image, error) {
+func New(s string) (Image, error) {
 	return nil, nil
 }
