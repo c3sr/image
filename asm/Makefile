@@ -1,16 +1,18 @@
 
 CXX = clang++
-CXXFLAGS= -O3 -std=c++11 -S  -mavx -mfma -masm=intel -mno-red-zone -mstackrealign -mllvm -inline-threshold=1000 -fno-asynchronous-unwind-tables -fno-exceptions -fno-rtti -fno-jump-tables
+AMD64CXXFLAGS= -O3 -std=c++11 -S  -mavx -mfma -masm=intel -mno-red-zone -mstackrealign -mllvm -inline-threshold=1000 -fno-asynchronous-unwind-tables -fno-exceptions -fno-rtti -fno-jump-tables
 
 SRCDIR=cbits
+TMPDIR=tmp
 
-all: hwc_to_chw.s
+all: hwc_to_chw_amd64.s
 
 hwc_to_chw.cpp.s: $(SRCDIR)/hwc_to_chw.cpp
-	$(CXX) $(CXXFLAGS) $^ -o $@
+	mkdir -p tmp
+	$(CXX) $(AMD64CXXFLAGS) $^ -o tmp/$@
 
-hwc_to_chw.s: hwc_to_chw.cpp.s
-	c2goasm -a -s -c -f $^ $@
+hwc_to_chw_amd64.s: hwc_to_chw.cpp.s
+	c2goasm -a -c -f tmp/$^ $@
 
 clean:
 	rm -fr *.s
