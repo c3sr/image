@@ -8,7 +8,7 @@ To build the ASM you need the following packages:
     go get github.com/minio/c2goasm
     go get github.com/minio/asm2plan9s
 
-you will also need need the `yasm` package
+you will also need the `yasm` package
 
 ## Notes:
 
