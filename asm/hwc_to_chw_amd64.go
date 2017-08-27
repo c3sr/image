@@ -5,17 +5,18 @@ package asm
 
 import (
 	"unsafe"
-
-	"github.com/anthonynsimon/bild/parallel"
 )
 
 //go:noescape
-func __Hwc2Cwh(output unsafe.Pointer, input unsafe.Pointer, height int, width int)
+func ___hwc2cwh(width uint32, height uint32, input unsafe.Pointer, result unsafe.Pointer)
 
-func Hwc2Cwh(output []float32, input []float32, width int, height int) {
+//go:noescape
+// func ___hwc2cwh2(width uint32, height uint32, mean unsafe.Pointer, input unsafe.Pointer, result unsafe.Pointer)
 
-	parallel.Line(height, func(start, end int) {
-		offset := start * width * 3
-		__Hwc2Cwh(unsafe.Pointer(&output[offset]), unsafe.Pointer(&input[offset]), width, end-start)
-	})
-}
+// func Hwc2Cwh(output []float32, input []float32, width int, height int) {
+
+// 	parallel.Line(height, func(start, end int) {
+// 		offset := start * width * 3
+// 		__hwc2cwh((uint)width, (uint)end-start, unsafe.Pointer(&input[offset]), unsafe.Pointer(&output[offset]))
+// 	})
+// }
