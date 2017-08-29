@@ -13,19 +13,19 @@ func randomList(size int) []float32 {
 	return output
 }
 
-func benchmarkHwcToChw(b *testing.B, width, height, channels int) {
+func benchmarkHwcToChw(b *testing.B, height, width, channels int) {
 	input := randomList(width * height * channels)
 	output := make([]float32, width*height*channels)
 	for ii := 0; ii < b.N; ii++ {
-		Hwc2Cwh(output, input, width, height)
+		Hwc2Cwh(output, input, height, width)
 	}
 }
 
-func benchmarkNativeHwcToChw(b *testing.B, width, height, channels int) {
+func benchmarkNativeHwcToChw(b *testing.B, height, width, channels int) {
 	input := randomList(width * height * channels)
 	output := make([]float32, width*height*channels)
 	for ii := 0; ii < b.N; ii++ {
-		nativeHwc2Cwh(output, input, width, height)
+		nativeHwc2Cwh(output, input, height, width)
 	}
 }
 

@@ -1,6 +1,9 @@
 
 CXX = clang++
-AMD64CXXFLAGS= -O3 -Dsincosf=__sincosf -Dsincos=__sincos -std=c++1z -S -mavx2 -mfma -masm=intel -ffast-math -mno-red-zone -mstackrealign -mllvm -inline-threshold=1000 -fno-asynchronous-unwind-tables -fno-exceptions -fno-rtti -fno-jump-tables
+AMD64CXXFLAGS= -O3 -Dsincosf=__sincosf -Dsincos=__sincos -std=c++1z -S \
+						   -mavx2 -mfma -masm=intel -ffast-math -mno-red-zone -mstackrealign \
+							 -mllvm -inline-threshold=1000 -fno-asynchronous-unwind-tables \
+							 -fno-exceptions -fno-rtti -fno-jump-tables
 
 SRCDIR=cbits
 TMPDIR=tmp

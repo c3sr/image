@@ -4,7 +4,7 @@ import (
 	"github.com/anthonynsimon/bild/parallel"
 )
 
-func nativeHwc2Cwh(output []float32, input []float32, width int, height int) {
+func nativeHwc2Cwh(output []float32, input []float32, height int, width int) {
 	firstPlane := input[0*width*height:]
 	secondPlane := input[1*width*height:]
 	thirdPlane := input[2*width*height:]
