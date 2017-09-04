@@ -86,15 +86,15 @@ extern "C" void resize(float *__restrict__ output,
 }
 #endif
 
-int main() {
-  float a[10] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
-  int m = 3, n = 2;
-  float *b = (float *)malloc(sizeof(float) * m * n);
-  resize_bilinear(b, a, m, n, 5, 2);
-  for (int i = 0; i < m; i++) {
-    for (int j = 0; j < n; j++) {
-      printf("%f ", b[i * n + j]);
-    }
-  }
-  return 0;
-}
+// int main() {
+//   float a[10] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+//   int m = 3, n = 2;
+//   float *b = (float *)malloc(sizeof(float) * m * n);
+//   resize_bilinear(b, a, m, n, 5, 2);
+//   for (int i = 0; i < m; i++) {
+//     for (int j = 0; j < n; j++) {
+//       printf("%f ", b[i * n + j]);
+//     }
+//   }
+//   return 0;
+// }

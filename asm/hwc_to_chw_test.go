@@ -17,7 +17,7 @@ func benchmarkHwcToChw(b *testing.B, height, width, channels int) {
 	input := randomList(width * height * channels)
 	output := make([]float32, width*height*channels)
 	for ii := 0; ii < b.N; ii++ {
-		Hwc2Cwh(output, input, height, width)
+		Hwc2Chw(output, input, height, width)
 	}
 }
 

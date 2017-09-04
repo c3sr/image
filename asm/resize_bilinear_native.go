@@ -7,7 +7,7 @@ import (
 	"github.com/pkg/errors"
 )
 
-func nativeResize(inputImage image.Image, width, height int) (image.Image, error) {
+func nativeResizeBilinear(inputImage image.Image, width, height int) (image.Image, error) {
 	res := image.NewRGBA(image.Rectangle{
 		Min: image.Point{
 			X: 0,

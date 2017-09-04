@@ -25,7 +25,7 @@ extern "C" void hwc2cwh(float *output, float *input0, uint64_t height, uint64_t 
   }
 }
 #else
-extern "C" void hwc2cwh(float *__restrict__ output,
+extern "C" void hwc2chw(float *__restrict__ output,
                         const float *const __restrict__ input0,
                         const uint64_t height, const uint64_t width) {
   const int channels = 3;
