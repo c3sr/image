@@ -25,7 +25,7 @@ func benchmarkNativeHwcToChw(b *testing.B, height, width, channels int) {
 	input := randomList(width * height * channels)
 	output := make([]float32, width*height*channels)
 	for ii := 0; ii < b.N; ii++ {
-		nativeHwc2Cwh(output, input, height, width)
+		nativeHwc2Chw(output, input, height, width)
 	}
 }
 

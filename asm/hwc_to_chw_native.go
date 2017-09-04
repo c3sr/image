@@ -4,10 +4,10 @@ import (
 	"github.com/anthonynsimon/bild/parallel"
 )
 
-func nativeHwc2Cwh(output []float32, input []float32, height int, width int) {
-	firstPlane := input[0*width*height:]
-	secondPlane := input[1*width*height:]
-	thirdPlane := input[2*width*height:]
+func nativeHwc2Chw(output []float32, input []float32, height int, width int) {
+	firstPlane := output[0*width*height:]
+	secondPlane := output[1*width*height:]
+	thirdPlane := output[2*width*height:]
 	parallel.Line(height, func(start, end int) {
 		w := width
 		for y := start; y < end; y++ {
