@@ -1,7 +1,7 @@
 #include <cstdint>
 #include <math.h>
-#include <stdlib.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 #define UNROLL_FACTOR 8
 
@@ -9,8 +9,8 @@ typedef float float3 __attribute__((ext_vector_type(3)));
 #define ROUND_DOWN(x, s) ((x) & ~((s)-1))
 
 #if 1
-extern "C" void resize_hori(float *dst, float *src, uint64_t h, uint64_t dst_w,
-                            uint64_t src_w) {
+extern "C" void resize_hori(uint8_t *dst, uint8_t *src, uint64_t h,
+                            uint64_t dst_w, uint64_t src_w) {
   float real_scale = ((float)src_w - 1) / ((float)dst_w - 1);
   for (int i = 0; i < h; i++) {
     for (int j = 0; j < dst_w; j++) {
@@ -19,35 +19,35 @@ extern "C" void resize_hori(float *dst, float *src, uint64_t h, uint64_t dst_w,
       if (x >= (src_w - 1)) {
         dst[i * dst_w + j] = src[i * src_w + src_w - 1];
       } else {
-        dst[i * dst_w + j] =
-            (1.0f - dx) * src[i * src_w + x] + (dx)*src[i * src_w + x + 1];
+        dst[i * dst_w + j] = (uint8_t)((1.0f - dx) * src[i * src_w + x] +
+                                       (dx)*src[i * src_w + x + 1]);
       }
     }
   }
 }
 
-extern "C" void resize_vert(float *dst, float *src, uint64_t w, uint64_t dst_h,
-                            uint64_t src_h) {
+extern "C" void resize_vert(uint8_t *dst, uint8_t *src, uint64_t w,
+                            uint64_t dst_h, uint64_t src_h) {
   float real_scale = ((float)src_h - 1) / ((float)dst_h - 1);
   for (int i = 0; i < w; i++) {
     for (int j = 0; j < dst_h; j++) {
       int y = floor((float)j * real_scale);
       float dy = j * real_scale - y;
       if (y >= (src_h - 1)) {
-        dst[i * dst_h + j] = src[i * src_h + src_h - 1];
+        dst[j * w + i] = src[i + (src_h - 1) * w];
       } else {
-        dst[i * dst_h + j] =
-            (1.0f - dy) * src[i * src_h + y] + (dy)*src[i * src_h + y + 1];
+        dst[j * w + i] =
+            (uint8_t)((1.0f - dy) * src[i + y * w] + dy * src[i + (y + 1) * w]);
       }
     }
   }
 }
 
-extern "C" void resize_bilinear(float *dst, float *src, uint64_t dst_h,
+extern "C" void resize_bilinear(uint8_t *dst, uint8_t *src, uint64_t dst_h,
                                 uint64_t dst_w, uint64_t src_h,
                                 uint64_t src_w) {
   const int channels = 1;
-  float *tmp = (float *)malloc(sizeof(float) * dst_w * src_h);
+  uint8_t *tmp = (uint8_t *)malloc(sizeof(uint8_t) * dst_w * src_h);
   resize_hori(tmp, src, src_h, dst_w, src_w);
   resize_vert(dst, tmp, dst_w, dst_h, src_h);
   free(tmp);
@@ -87,14 +87,15 @@ extern "C" void resize(float *__restrict__ output,
 #endif
 
 // int main() {
-//   float a[10] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
-//   int m = 3, n = 2;
-//   float *b = (float *)malloc(sizeof(float) * m * n);
-//   resize_bilinear(b, a, m, n, 5, 2);
+//   uint8_t a[16] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15};
+//   int m = 2, n = 2;
+//   uint8_t *b = (uint8_t *)malloc(sizeof(uint8_t) * m * n);
+//   resize_bilinear(b, a, m, n, 4, 4);
 //   for (int i = 0; i < m; i++) {
 //     for (int j = 0; j < n; j++) {
-//       printf("%f ", b[i * n + j]);
+//       printf("%d ", b[i * n + j]);
 //     }
+//     printf("\n");
 //   }
 //   return 0;
 // }

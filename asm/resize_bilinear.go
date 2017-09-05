@@ -3,6 +3,8 @@
 
 package asm
 
-func ResizeBilinear(output []float32, input []float32, height int, width int) {
-	nativeResizeBilinear(output, input, height, width)
+import "image"
+
+func ResizeBilinear(inputImage image.Image, height int, width int) (image.Image, error) {
+	return nativeResizeBilinear(inputImage, height, width)
 }
