@@ -24,8 +24,8 @@ func Hwc2Chw(output []float32, input []float32, height int, width int) {
 		__hwc2chw(
 			unsafe.Pointer(&output[offset]),
 			unsafe.Pointer(&input[offset]),
-			uint64(width),
 			uint64(end-start),
+			uint64(width),
 		)
 	})
 
