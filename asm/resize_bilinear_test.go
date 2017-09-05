@@ -6,27 +6,38 @@ import (
 	"testing"
 
 	"github.com/rai-project/image"
+	"github.com/stretchr/testify/assert"
 )
 
-func randomRGBImage(h, w, c int) image.RGBImage {
+func randomRGBImage(h, w, c int) *image.RGBImage {
 	res := image.NewRGBImage(goimage.Rect(0, 0, w, h))
 	for ii := 0; ii < c*h*w; ii++ {
 		res.Pix[ii] = rand.Float32()
 	}
-	return *res
+	return res
+}
+
+func randomRGBAImage(h, w, c int) *goimage.RGBA {
+	res := goimage.NewRGBA(goimage.Rect(0, 0, w, h))
+	for ii := 0; ii < c*h*w; ii++ {
+		res.Pix[ii] = uint8(rand.Uint32())
+	}
+	return res
 }
 
 func benchmarkResizeBilinear(b *testing.B, height, width, channels int) {
 	input := randomRGBImage(height, width, channels)
 	for ii := 0; ii < b.N; ii++ {
-		ResizeBilinear(input, height, width)
+		_, err := ResizeBilinear(input, height, width)
+		assert.NoError(b, err)
 	}
 }
 
 func benchmarkNativeResizeBilinear(b *testing.B, height, width, channels int) {
-	input := randomRGBImage(height, width, channels)
+	input := randomRGBAImage(height, width, channels)
 	for ii := 0; ii < b.N; ii++ {
-		nativeResizeBilinear(input, height, width)
+		_, err := nativeResizeBilinear(input, height, width)
+		assert.NoError(b, err)
 	}
 }
 

@@ -1,12 +1,12 @@
 #include "stdint.h"
-
+#include "string.h"
 typedef float float3 __attribute__((ext_vector_type(3)));
 
 template <typename T> static const T min(const T &x, const T &y) {
   return x < y ? x : y;
 }
 
-extern "C" void resize_bilinear(float *dst, float *src, uint64_t dst_h,
+extern "C" void resize_bilinear(float *dst,const  float *src, uint64_t dst_h,
                                 uint64_t dst_w, uint64_t src_h,
                                 uint64_t src_w) {
   float scale_y = (float)src_h / (float)dst_h;
