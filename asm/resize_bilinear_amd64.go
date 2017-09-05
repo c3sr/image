@@ -17,16 +17,19 @@ func __resize_bilinear(dst unsafe.Pointer, src unsafe.Pointer, dst_h uint64, dst
 
 func ResizeBilinear(inputImage *image.RGBImage, height int, width int) (*image.RGBImage, error) {
 	res := image.NewRGBImage(goimage.Rect(0, 0, width, height))
-	src_h := inputImage.Rect.Dy()
-	src_w := inputImage.Rect.Dx()
+	srcHeight := inputImage.Rect.Dy()
+	srcWidth := inputImage.Rect.Dx()
 
-	parallel.Line(src_h, func(start, end int) {
-		offset := start * width * 3
+	parallel.Line(height, func(start, end int) {
+		scale := float32(srcHeight) / float32(height)
+		dstOffset := start * width * 3
+		srcOffset := int(scale*float32(start)) * srcWidth * 3
+
 		__resize_bilinear(
-			unsafe.Pointer(&res.Pix[offset]),
-			unsafe.Pointer(&inputImage.Pix[offset]),
+			unsafe.Pointer(&res.Pix[dstOffset]),
+			unsafe.Pointer(&inputImage.Pix[srcOffset]),
 			uint64(end-start), uint64(width),
-			uint64(end-start), uint64(src_w),
+			uint64(int(scale*float32(end))-int(scale*float32(start))), uint64(srcWidth),
 		)
 	})
 
