@@ -4,8 +4,8 @@
 package asm
 
 import (
-  "unsafe"
-  "image"
+	"image"
+	"unsafe"
 )
 
 //go:noescape
@@ -27,7 +27,8 @@ func ResizeBilinear(inputImage image.Image, height int, width int) (image.Image,
 			X: width,
 			Y: height,
 		},
-  })
-  __resize_bilinear(res.Pix, src unsafe.Pointer, dst_h uint64, dst_w uint64, src_h uint64, src_w uint64) {
+	})
+	// __resize_bilinear(unsafe.Pointer(res.Pix), unsafe.Pointer(inputImage.RGBA.Pix)) {
 
+	return res, nil
 }
