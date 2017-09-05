@@ -3,8 +3,8 @@
 
 package asm
 
-import "image"
+import "github.com/rai-project/image"
 
-func ResizeBilinear(inputImage image.Image, height int, width int) (image.Image, error) {
+func ResizeBilinear(inputImage image.RGBImage, height int, width int) (image.Image, error) {
 	return nativeResizeBilinear(inputImage, height, width)
 }
