@@ -4,7 +4,7 @@ import (
 	"image"
 	"io"
 
-	"github.com/pixiv/go-libjpeg/jpeg"
+	"github.com/rai-project/go-libjpeg/jpeg"
 )
 
 func init() {
