@@ -22,12 +22,6 @@ func ResizeBilinear(inputImage image.RGBImage, height int, width int) (*image.RG
 
 	parallel.Line(src_h, func(start, end int) {
 		offset := start * width * 3
-		// __hwc2chw(
-		// 	unsafe.Pointer(&output[offset]),
-		// 	unsafe.Pointer(&input[offset]),
-		// 	uint64(width),
-		// 	uint64(end-start),
-		// )
 		__resize_bilinear(
 			unsafe.Pointer(&res.Pix[offset]),
 			unsafe.Pointer(&inputImage.Pix[offset]),
