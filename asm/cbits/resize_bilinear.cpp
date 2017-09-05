@@ -2,6 +2,7 @@
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <iostream>
 
 #define UNROLL_FACTOR 8
 
@@ -9,7 +10,7 @@ typedef float float3 __attribute__((ext_vector_type(3)));
 #define ROUND_DOWN(x, s) ((x) & ~((s)-1))
 
 #if 1
-extern "C" void resize_hori(float *dst, float *src, uint64_t h,
+extern "C" void resize_hori(float3 *dst, float3 *src, uint64_t h,
                             uint64_t dst_w, uint64_t src_w) {
   float real_scale = ((float)src_w - 1) / ((float)dst_w - 1);
   for (int i = 0; i < h; i++) {
@@ -26,7 +27,7 @@ extern "C" void resize_hori(float *dst, float *src, uint64_t h,
   }
 }
 
-extern "C" void resize_vert(float *dst, float *src, uint64_t w,
+extern "C" void resize_vert(float3 *dst, float3 *src, uint64_t w,
                             uint64_t dst_h, uint64_t src_h) {
   float real_scale = ((float)src_h - 1) / ((float)dst_h - 1);
   for (int i = 0; i < w; i++) {
@@ -46,10 +47,10 @@ extern "C" void resize_vert(float *dst, float *src, uint64_t w,
 extern "C" void resize_bilinear(float *dst, float *src, uint64_t dst_h,
                                 uint64_t dst_w, uint64_t src_h,
                                 uint64_t src_w) {
-  const int channels = 1;
-  float *tmp = (float *)malloc(sizeof(float) * dst_w * src_h);
-  resize_hori(tmp, src, src_h, dst_w, src_w);
-  resize_vert(dst, tmp, dst_w, dst_h, src_h);
+  const int channels = 3;
+  float3 *tmp = (float3 *)malloc(sizeof(float3) * dst_w * src_h);
+  resize_hori(tmp, (float3 *)src, src_h, dst_w, src_w);
+  resize_vert((float3 *)dst, tmp, dst_w, dst_h, src_h);
   free(tmp);
 }
 #else
@@ -86,16 +87,26 @@ extern "C" void resize(float *__restrict__ output,
 }
 #endif
 
-// int main() {
-//   float a[16] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15};
-//   int m = 2, n = 2;
-//   float *b = (float *)malloc(sizeof(float) * m * n);
-//   resize_bilinear(b, a, m, n, 4, 4);
-//   for (int i = 0; i < m; i++) {
-//     for (int j = 0; j < n; j++) {
-//       printf("%f ", b[i * n + j]);
-//     }
-//     printf("\n");
-//   }
-//   return 0;
-// }
+
+int main() {
+  float a[] = {0, 0, 0, 1, 1, 1, 2, 2, 2, 3, 3, 3, 4, 4, 4,
+    0, 0, 0, 1, 1, 1, 2, 2, 2, 3, 3, 3, 4, 4, 4,
+    0, 0, 0, 1, 1, 1, 2, 2, 2, 3, 3, 3, 4, 4, 4,
+    0, 0, 0, 1, 1, 1, 2, 2, 2, 3, 3, 3, 4, 4, 4,
+    0, 0, 0, 1, 1, 1, 2, 2, 2, 3, 3, 3, 4, 4, 4,
+    0, 0, 0, 1, 1, 1, 2, 2, 2, 3, 3, 3, 4, 4, 4,
+    0, 0, 0, 1, 1, 1, 2, 2, 2, 3, 3, 3, 4, 4, 4,
+    0, 0, 0, 1, 1, 1, 2, 2, 2, 3, 3, 3, 4, 4, 4};
+  int m = 2, n = 4;
+  float *b = (float *)malloc(sizeof(float) * m * n * 3);
+  resize_bilinear(b, a, m, n, 4, 4);
+  for (int i = 0; i < m; i++) {
+    for (int j = 0; j < n; j++) {
+      for (int k = 0; k < 3; k++) {
+      printf("%f ", b[3*(i * n + j)+k]);
+    }
+  }
+    printf("\n");
+  }
+  return 0;
+}
