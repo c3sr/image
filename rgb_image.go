@@ -20,13 +20,13 @@ type RGBImage struct {
 	Rect image.Rectangle
 }
 
-func (p *RGBImage) ColorModel() color.Model { return RGBModel }
+func (p RGBImage) ColorModel() color.Model { return RGBModel }
 
-func (p *RGBImage) Bounds() image.Rectangle { return p.Rect }
+func (p RGBImage) Bounds() image.Rectangle { return p.Rect }
 
-func (p *RGBImage) Mode() mode { return RGBMode }
+func (p RGBImage) Mode() mode { return RGBMode }
 
-func (p *RGBImage) At(x, y int) color.Color {
+func (p RGBImage) At(x, y int) color.Color {
 	return p.RGBAt(x, y)
 }
 

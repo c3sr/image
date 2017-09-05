@@ -1,13 +1,8 @@
 package image
 
 import (
-	"context"
 	"image"
 	"image/draw"
-
-	"github.com/bamiaux/rez"
-	opentracing "github.com/opentracing/opentracing-go"
-	"github.com/pkg/errors"
 )
 
 func AsRGBA(src image.Image) *image.RGBA {
@@ -17,37 +12,37 @@ func AsRGBA(src image.Image) *image.RGBA {
 	return img
 }
 
-func Resize(ctx context.Context, inputImage image.Image, width, height int) (image.Image, error) {
+// func Resize(ctx context.Context, inputImage image.Image, width, height int) (image.Image, error) {
 
-	if span, newCtx := opentracing.StartSpanFromContext(ctx, "ImageResize"); span != nil {
-		ctx = newCtx
-		defer span.Finish()
-	}
+// 	if span, newCtx := opentracing.StartSpanFromContext(ctx, "ImageResize"); span != nil {
+// 		ctx = newCtx
+// 		defer span.Finish()
+// 	}
 
-	inputImage = AsRGBA(inputImage)
+// 	inputImage = AsRGBA(inputImage)
 
-	res := image.NewRGBA(image.Rectangle{
-		Min: image.Point{
-			X: 0,
-			Y: 0,
-		},
-		Max: image.Point{
-			X: width,
-			Y: height,
-		},
-	})
-	cfg, err := rez.PrepareConversion(res, inputImage)
-	if err != nil {
-		return nil, errors.Wrap(err, "unable to create resize configuration")
-	}
-	converter, err := rez.NewConverter(cfg, rez.NewBilinearFilter())
-	if err != nil {
-		return nil, errors.Wrap(err, "unable to create resize converter")
-	}
-	err = converter.Convert(res, inputImage)
-	if err != nil {
-		return nil, errors.Wrap(err, "unable to resize image")
-	}
+// 	res := image.NewRGBA(image.Rectangle{
+// 		Min: image.Point{
+// 			X: 0,
+// 			Y: 0,
+// 		},
+// 		Max: image.Point{
+// 			X: width,
+// 			Y: height,
+// 		},
+// 	})
+// 	cfg, err := rez.PrepareConversion(res, inputImage)
+// 	if err != nil {
+// 		return nil, errors.Wrap(err, "unable to create resize configuration")
+// 	}
+// 	converter, err := rez.NewConverter(cfg, rez.NewBilinearFilter())
+// 	if err != nil {
+// 		return nil, errors.Wrap(err, "unable to create resize converter")
+// 	}
+// 	err = converter.Convert(res, inputImage)
+// 	if err != nil {
+// 		return nil, errors.Wrap(err, "unable to resize image")
+// 	}
 
-	return res, nil
-}
+// 	return res, nil
+// }

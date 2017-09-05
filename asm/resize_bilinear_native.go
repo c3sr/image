@@ -1,23 +1,15 @@
 package asm
 
 import (
-	"image"
+	goimage "image"
 
 	"github.com/bamiaux/rez"
 	"github.com/pkg/errors"
+	"github.com/rai-project/image"
 )
 
-func nativeResizeBilinear(inputImage image.Image, width, height int) (image.Image, error) {
-	res := image.NewRGBA(image.Rectangle{
-		Min: image.Point{
-			X: 0,
-			Y: 0,
-		},
-		Max: image.Point{
-			X: width,
-			Y: height,
-		},
-	})
+func nativeResizeBilinear(inputImage image.RGBImage, height int, width int) (*image.RGBImage, error) {
+	res := image.NewRGBImage(goimage.Rect(0, 0, width, height))
 	cfg, err := rez.PrepareConversion(res, inputImage)
 	if err != nil {
 		return nil, errors.Wrap(err, "unable to create resize configuration")
