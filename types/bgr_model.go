@@ -1,4 +1,4 @@
-package image
+package types
 
 import (
 	"image/color"
