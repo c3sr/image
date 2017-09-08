@@ -6,6 +6,8 @@ type Options struct {
 	resizeWidth  int
 	resizeHeight int
 	mode         types.Mode
+	mean         [3]float32
+	layout       layout
 }
 
 type Option func(o *Options)
@@ -19,16 +21,17 @@ func Resize(width, height int) Option {
 
 func Mean(mean [3]float32) Option {
 	return func(o *Options) {
+		o.mean = mean
 	}
 }
 
 func MeanValue(mean float32) Option {
-	return func(o *Options) {
-	}
+	return Mean([3]float32{mean, mean, mean})
 }
 
 func Layout(layout layout) Option {
 	return func(o *Options) {
+		o.layout = layout
 	}
 }
 
@@ -40,6 +43,8 @@ func Mode(mode types.Mode) Option {
 
 func NewOptions() *Options {
 	return &Options{
-		mode: types.RGBMode,
+		mean:   [3]float32{0, 0, 0},
+		mode:   types.RGBMode,
+		layout: HWCLayout,
 	}
 }
