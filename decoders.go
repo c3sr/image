@@ -26,14 +26,26 @@ var (
 )
 
 func decodeReader(ctx context.Context, decoder func(io.Reader) (image.Image, error), reader io.Reader) (types.Image, error) {
+	options, ok := ctx.Value("options").(*Options)
+	if !ok {
+		return nil, errors.New("expecting options to be passed in context")
+	}
 
 	img, err := decoder(reader)
 	if err != nil {
 		return nil, errors.Wrapf(err, "unable to read %s as a jpeg image", ctx.Value("filePath"))
 	}
 
-	model := img.ColorModel()
+	if res, ok := img.(*types.RGBImage); ok && options.mode == types.RGBMode {
+		return res, nil
+	}
 
+	if res, ok := img.(*types.BGRImage); ok && options.mode == types.BGRMode {
+		return res, nil
+	}
+
+	model := img.ColorModel()
+	// pp.Println(model == color.NRGBA64Model)
 	if model == color.NRGBAModel {
 		if rgbaImage, ok := img.(*image.NRGBA); ok {
 			return fromNRGBA(ctx, rgbaImage)
