@@ -6,7 +6,6 @@ import (
 
 	"golang.org/x/net/context"
 
-	"github.com/k0kubun/pp"
 	"github.com/pkg/errors"
 	"github.com/rai-project/image/types"
 )
@@ -50,7 +49,6 @@ func Read(ctx context.Context, r io.Reader) (*types.RGBImage, error) {
 	if err != nil {
 		return nil, err
 	}
-	pp.Println(format)
 	decoder, ok := imageFormatDecoders[format]
 	if !ok {
 		return nil, errors.Errorf("invalid format %v", format)

@@ -134,6 +134,62 @@ func (p *BGRImage) FillFromNRGBAImage(ctx context.Context, nrgbaImage *image.NRG
 	return nil
 }
 
+func (p *BGRImage) FillFromYCBCRImage(ctx context.Context, ycImage *image.YCbCr) error {
+	if p.Bounds() != ycImage.Bounds() {
+		return errors.Errorf("the bounds %v and %v did not match", p.Bounds(), ycImage.Bounds())
+	}
+
+	width := ycImage.Bounds().Dx()
+	height := ycImage.Bounds().Dy()
+
+	bgrImagePixels := p.Pix
+	for y := 0; y < height; y++ {
+		bgrOffset := y * width
+		for x := 0; x < width; x++ {
+			yi := ycImage.YOffset(x, y)
+			ci := ycImage.COffset(x, y)
+			r, g, b, _ := color.YCbCr{
+				ycImage.Y[yi],
+				ycImage.Cb[ci],
+				ycImage.Cr[ci],
+			}.RGBA()
+			bgrImagePixels[bgrOffset+0] = uint8(b >> 8)
+			bgrImagePixels[bgrOffset+1] = uint8(g >> 8)
+			bgrImagePixels[bgrOffset+2] = uint8(r >> 8)
+			bgrOffset += 3
+		}
+	}
+
+	return nil
+}
+
+func (p *BGRImage) FillFromGrayImage(ctx context.Context, grayImage *image.Gray) error {
+	if p.Bounds() != grayImage.Bounds() {
+		return errors.Errorf("the bounds %v and %v did not match", p.Bounds(), grayImage.Bounds())
+	}
+
+	width := grayImage.Bounds().Dx()
+	height := grayImage.Bounds().Dy()
+	stride := grayImage.Stride
+
+	bgrImagePixels := p.Pix
+	grayImagePixels := grayImage.Pix
+	for y := 0; y < height; y++ {
+		bgrOffset := y * width
+		grayOffset := y * stride
+		for x := 0; x < width; x++ {
+			pix := grayImagePixels[grayOffset]
+			bgrImagePixels[bgrOffset+0] = pix
+			bgrImagePixels[bgrOffset+1] = pix
+			bgrImagePixels[bgrOffset+2] = pix
+			grayOffset++
+			bgrOffset += 3
+		}
+	}
+
+	return nil
+}
+
 // NewBGRImage returns a new BGRImage image with the given bounds.
 func NewBGRImage(r image.Rectangle) *BGRImage {
 	w, h := r.Dx(), r.Dy()
