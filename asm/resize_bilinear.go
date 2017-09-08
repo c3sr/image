@@ -5,9 +5,9 @@
 package asm
 
 import (
-	"github.com/rai-project/image"
+	"github.com/rai-project/image/types"
 )
 
-func ResizeBilinear(inputImage *image.RGBImage, height int, width int) (*image.RGBImage, error) {
+func ResizeBilinear(inputImage *types.RGBImage, height int, width int) (*types.RGBImage, error) {
 	return nativeResizeBilinear(inputImage, height, width)
 }

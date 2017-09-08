@@ -6,13 +6,14 @@ import (
 	"testing"
 
 	"github.com/rai-project/image"
+	"github.com/rai-project/image/types"
 	"github.com/stretchr/testify/assert"
 )
 
 func randomRGBImage(h, w, c int) *image.RGBImage {
-	res := image.NewRGBImage(goimage.Rect(0, 0, w, h))
+	res := types.NewRGBImage(goimage.Rect(0, 0, w, h))
 	for ii := 0; ii < c*h*w; ii++ {
-		res.Pix[ii] = rand.Float32()
+		res.Pix[ii] = uint8(rand.Int())
 	}
 	return res
 }
@@ -20,7 +21,7 @@ func randomRGBImage(h, w, c int) *image.RGBImage {
 func randomRGBAImage(h, w, c int) *goimage.RGBA {
 	res := goimage.NewRGBA(goimage.Rect(0, 0, w, h))
 	for ii := 0; ii < c*h*w; ii++ {
-		res.Pix[ii] = uint8(rand.Uint32())
+		res.Pix[ii] = uint8(rand.Int())
 	}
 	return res
 }

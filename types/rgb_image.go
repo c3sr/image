@@ -13,7 +13,7 @@ import (
 type RGBImage struct {
 	// Pix holds the image's pixels, in R, G, B order. The pixel at
 	// (x, y) starts at Pix[(y-Rect.Min.Y)*Stride + (x-Rect.Min.X)*3].
-	Pix []float32
+	Pix []uint8
 	// Stride is the Pix stride (in bytes) between vertically adjacent pixels.
 	Stride int
 	// Rect is the image's bounds.
@@ -24,7 +24,7 @@ func (p RGBImage) ColorModel() color.Model { return RGBModel }
 
 func (p RGBImage) Bounds() image.Rectangle { return p.Rect }
 
-func (p RGBImage) Mode() mode { return RGBMode }
+func (p RGBImage) Mode() Mode { return RGBMode }
 
 func (p RGBImage) At(x, y int) color.Color {
 	return p.RGBAt(x, y)
@@ -83,7 +83,7 @@ func (p *RGBImage) SubImage(r image.Rectangle) Image {
 	}
 }
 
-func (p *RGBImage) fillFromRGBAImage(ctx context.Context, rgbaImage *image.RGBA) error {
+func (p *RGBImage) FillFromRGBAImage(ctx context.Context, rgbaImage *image.RGBA) error {
 	if p.Bounds() != rgbaImage.Bounds() {
 		return errors.Errorf("the bounds %v and %v did not match", p.Bounds(), rgbaImage.Bounds())
 	}
@@ -98,9 +98,9 @@ func (p *RGBImage) fillFromRGBAImage(ctx context.Context, rgbaImage *image.RGBA)
 		rgbaOffset := y * stride
 		rgbOffset := y * width
 		for x := 0; x < width; x++ {
-			rgbImagePixels[rgbOffset+0] = float32(rgbaImagePixels[rgbaOffset+0])
-			rgbImagePixels[rgbOffset+1] = float32(rgbaImagePixels[rgbaOffset+1])
-			rgbImagePixels[rgbOffset+2] = float32(rgbaImagePixels[rgbaOffset+2])
+			rgbImagePixels[rgbOffset+0] = rgbaImagePixels[rgbaOffset+0]
+			rgbImagePixels[rgbOffset+1] = rgbaImagePixels[rgbaOffset+1]
+			rgbImagePixels[rgbOffset+2] = rgbaImagePixels[rgbaOffset+2]
 			rgbaOffset += 4
 			rgbOffset += 3
 		}
@@ -109,7 +109,7 @@ func (p *RGBImage) fillFromRGBAImage(ctx context.Context, rgbaImage *image.RGBA)
 	return nil
 }
 
-func (p *RGBImage) fillFromNRGBAImage(ctx context.Context, nrgbaImage *image.NRGBA) error {
+func (p *RGBImage) FillFromNRGBAImage(ctx context.Context, nrgbaImage *image.NRGBA) error {
 	if p.Bounds() != nrgbaImage.Bounds() {
 		return errors.Errorf("the bounds %v and %v did not match", p.Bounds(), nrgbaImage.Bounds())
 	}
@@ -124,9 +124,9 @@ func (p *RGBImage) fillFromNRGBAImage(ctx context.Context, nrgbaImage *image.NRG
 		nrgbaOffset := y * stride
 		rgbOffset := y * width
 		for x := 0; x < width; x++ {
-			rgbImagePixels[rgbOffset+0] = float32(nrgbaImagePixels[nrgbaOffset+0])
-			rgbImagePixels[rgbOffset+1] = float32(nrgbaImagePixels[nrgbaOffset+1])
-			rgbImagePixels[rgbOffset+2] = float32(nrgbaImagePixels[nrgbaOffset+2])
+			rgbImagePixels[rgbOffset+0] = nrgbaImagePixels[nrgbaOffset+0]
+			rgbImagePixels[rgbOffset+1] = nrgbaImagePixels[nrgbaOffset+1]
+			rgbImagePixels[rgbOffset+2] = nrgbaImagePixels[nrgbaOffset+2]
 			nrgbaOffset += 4
 			rgbOffset += 3
 		}
@@ -138,6 +138,6 @@ func (p *RGBImage) fillFromNRGBAImage(ctx context.Context, nrgbaImage *image.NRG
 // NewRGBImage returns a new RGBImage image with the given bounds.
 func NewRGBImage(r image.Rectangle) *RGBImage {
 	w, h := r.Dx(), r.Dy()
-	buf := make([]float32, 3*w*h)
+	buf := make([]uint8, 3*w*h)
 	return &RGBImage{buf, 3 * w, r}
 }

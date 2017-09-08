@@ -1,9 +1,11 @@
 package image
 
+import "github.com/rai-project/image/types"
+
 type Options struct {
 	resizeWidth  int
 	resizeHeight int
-	mode         mode
+	mode         types.Mode
 }
 
 type Option func(o *Options)
@@ -30,7 +32,7 @@ func Layout(layout layout) Option {
 	}
 }
 
-func Mode(mode mode) Option {
+func Mode(mode types.Mode) Option {
 	return func(o *Options) {
 		o.mode = mode
 	}
@@ -38,6 +40,6 @@ func Mode(mode mode) Option {
 
 func NewOptions() *Options {
 	return &Options{
-		mode: RGBMode,
+		mode: types.RGBMode,
 	}
 }

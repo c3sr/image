@@ -11,7 +11,7 @@ var (
 // RGB represents a traditional 32-bit alpha-premultiplied color, having 8
 // bits for each of red, green, blue.
 type RGB struct {
-	R, G, B float32
+	R, G, B uint8
 }
 
 func (c RGB) RGBA() (r, g, b, a uint32) {
@@ -30,5 +30,5 @@ func rgbModel(c color.Color) color.Color {
 		return c
 	}
 	r, g, b, _ := c.RGBA()
-	return RGB{float32(r >> 8), float32(g >> 8), float32(b >> 8)}
+	return RGB{uint8(r >> 8), uint8(g >> 8), uint8(b >> 8)}
 }

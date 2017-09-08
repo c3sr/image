@@ -5,9 +5,10 @@ import (
 
 	"github.com/bamiaux/rez"
 	"github.com/pkg/errors"
+	"github.com/rai-project/image/types"
 )
 
-func nativeResizeBilinear(inputImage *image.RGBA, height int, width int) (*image.RGBA, error) {
+func nativeResizeBilinear(inputImage *types.RGBImage, height int, width int) (*types.RGBImage, error) {
 	res := image.NewRGBA(image.Rect(0, 0, width, height))
 	cfg, err := rez.PrepareConversion(res, inputImage)
 	if err != nil {

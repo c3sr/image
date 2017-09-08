@@ -8,7 +8,7 @@ import (
 func randomList(size int) []float32 {
 	output := make([]float32, size)
 	for ii := 0; ii < size; ii++ {
-		output[ii] = rand.Float32()
+		output[ii] = uint8(rand.Int())
 	}
 	return output
 }

@@ -12,6 +12,7 @@ import (
 
 	"github.com/pkg/errors"
 
+	"github.com/rai-project/image/types"
 	"golang.org/x/image/bmp"
 )
 
@@ -24,7 +25,7 @@ var (
 	}
 )
 
-func decodeReader(ctx context.Context, decoder func(io.Reader) (image.Image, error), reader io.Reader) (Image, error) {
+func decodeReader(ctx context.Context, decoder func(io.Reader) (image.Image, error), reader io.Reader) (types.Image, error) {
 
 	img, err := decoder(reader)
 	if err != nil {
@@ -50,21 +51,21 @@ func decodeReader(ctx context.Context, decoder func(io.Reader) (image.Image, err
 	return nil, errors.New("expecting image to be in RGBA or NRGBA fromat")
 }
 
-func fromNRGBA(ctx context.Context, nrgbaImage *image.NRGBA) (Image, error) {
+func fromNRGBA(ctx context.Context, nrgbaImage *image.NRGBA) (types.Image, error) {
 	options, ok := ctx.Value("options").(*Options)
 	if !ok {
 		return nil, errors.New("expecting options to be passed in context")
 	}
 	switch options.mode {
-	case RGBMode:
-		rgbImage := NewRGBImage(nrgbaImage.Bounds())
-		if err := rgbImage.fillFromNRGBAImage(ctx, nrgbaImage); err != nil {
+	case types.RGBMode:
+		rgbImage := types.NewRGBImage(nrgbaImage.Bounds())
+		if err := rgbImage.FillFromNRGBAImage(ctx, nrgbaImage); err != nil {
 			return nil, err
 		}
 		return rgbImage, nil
-	case BGRMode:
-		bgrImage := NewBGRImage(nrgbaImage.Bounds())
-		if err := bgrImage.fillFromNRGBAImage(ctx, nrgbaImage); err != nil {
+	case types.BGRMode:
+		bgrImage := types.NewBGRImage(nrgbaImage.Bounds())
+		if err := bgrImage.FillFromNRGBAImage(ctx, nrgbaImage); err != nil {
 			return nil, err
 		}
 		return bgrImage, nil
@@ -72,21 +73,21 @@ func fromNRGBA(ctx context.Context, nrgbaImage *image.NRGBA) (Image, error) {
 	return nil, errors.Errorf("invalid image mode %v", options.mode)
 }
 
-func fromRGBA(ctx context.Context, rgbaImage *image.RGBA) (Image, error) {
+func fromRGBA(ctx context.Context, rgbaImage *image.RGBA) (types.Image, error) {
 	options, ok := ctx.Value("options").(*Options)
 	if !ok {
 		return nil, errors.New("expecting options to be passed in context")
 	}
 	switch options.mode {
-	case RGBMode:
-		rgbImage := NewRGBImage(rgbaImage.Bounds())
-		if err := rgbImage.fillFromRGBAImage(ctx, rgbaImage); err != nil {
+	case types.RGBMode:
+		rgbImage := types.NewRGBImage(rgbaImage.Bounds())
+		if err := rgbImage.FillFromRGBAImage(ctx, rgbaImage); err != nil {
 			return nil, err
 		}
 		return rgbImage, nil
-	case BGRMode:
-		bgrImage := NewBGRImage(rgbaImage.Bounds())
-		if err := bgrImage.fillFromRGBAImage(ctx, rgbaImage); err != nil {
+	case types.BGRMode:
+		bgrImage := types.NewBGRImage(rgbaImage.Bounds())
+		if err := bgrImage.FillFromRGBAImage(ctx, rgbaImage); err != nil {
 			return nil, err
 		}
 		return bgrImage, nil

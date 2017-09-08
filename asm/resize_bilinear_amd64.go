@@ -9,14 +9,14 @@ import (
 	goimage "image"
 
 	"github.com/anthonynsimon/bild/parallel"
-	"github.com/rai-project/image"
+	"github.com/rai-project/image/types"
 )
 
 //go:noescape
 func __resize_bilinear(dst unsafe.Pointer, src unsafe.Pointer, dst_h uint64, dst_w uint64, src_h uint64, src_w uint64)
 
-func ResizeBilinear(inputImage *image.RGBImage, height int, width int) (*image.RGBImage, error) {
-	res := image.NewRGBImage(goimage.Rect(0, 0, width, height))
+func ResizeBilinear(inputImage *types.RGBImage, height int, width int) (*types.RGBImage, error) {
+	res := types.NewRGBImage(goimage.Rect(0, 0, width, height))
 	srcHeight := inputImage.Rect.Dy()
 	srcWidth := inputImage.Rect.Dx()
 

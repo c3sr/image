@@ -1,10 +1,10 @@
-package image
+package types
 
 // mode represents the image mode
-type mode int
+type Mode int
 
 const (
-	RGBMode mode = iota
+	RGBMode Mode = iota
 	BGRMode
 	NonInterlacedRGBMode
 	NonInterlacedBGRMode
