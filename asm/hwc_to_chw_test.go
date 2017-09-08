@@ -5,8 +5,8 @@ import (
 	"testing"
 )
 
-func randomList(size int) []float32 {
-	output := make([]float32, size)
+func randomList(size int) []uint8 {
+	output := make([]uint8, size)
 	for ii := 0; ii < size; ii++ {
 		output[ii] = uint8(rand.Int())
 	}
@@ -15,7 +15,7 @@ func randomList(size int) []float32 {
 
 func benchmarkHwcToChw(b *testing.B, height, width, channels int) {
 	input := randomList(width * height * channels)
-	output := make([]float32, width*height*channels)
+	output := make([]uint8, width*height*channels)
 	for ii := 0; ii < b.N; ii++ {
 		Hwc2Chw(output, input, height, width)
 	}
@@ -23,7 +23,7 @@ func benchmarkHwcToChw(b *testing.B, height, width, channels int) {
 
 func benchmarkNativeHwcToChw(b *testing.B, height, width, channels int) {
 	input := randomList(width * height * channels)
-	output := make([]float32, width*height*channels)
+	output := make([]uint8, width*height*channels)
 	for ii := 0; ii < b.N; ii++ {
 		nativeHwc2Chw(output, input, height, width)
 	}

@@ -5,12 +5,11 @@ import (
 	"math/rand"
 	"testing"
 
-	"github.com/rai-project/image"
 	"github.com/rai-project/image/types"
 	"github.com/stretchr/testify/assert"
 )
 
-func randomRGBImage(h, w, c int) *image.RGBImage {
+func randomRGBImage(h, w, c int) *types.RGBImage {
 	res := types.NewRGBImage(goimage.Rect(0, 0, w, h))
 	for ii := 0; ii < c*h*w; ii++ {
 		res.Pix[ii] = uint8(rand.Int())
