@@ -10,6 +10,7 @@ import (
 
 	context "golang.org/x/net/context"
 
+	"github.com/k0kubun/pp"
 	"github.com/pkg/errors"
 
 	"github.com/rai-project/image/types"
@@ -30,10 +31,13 @@ func decodeReader(ctx context.Context, decoder func(io.Reader) (image.Image, err
 	if !ok {
 		return nil, errors.New("expecting options to be passed in context")
 	}
+	if _, ok := ctx.Value("filePath").(string); !ok {
+		ctx = context.WithValue(ctx, "filePath", "<<READER>>")
+	}
 
 	img, err := decoder(reader)
 	if err != nil {
-		return nil, errors.Wrapf(err, "unable to read %s as a jpeg image", ctx.Value("filePath"))
+		return nil, errors.Wrapf(err, "unable to read %s as an image", ctx.Value("filePath"))
 	}
 
 	if res, ok := img.(*types.RGBImage); ok && options.mode == types.RGBMode {
@@ -44,16 +48,26 @@ func decodeReader(ctx context.Context, decoder func(io.Reader) (image.Image, err
 		return res, nil
 	}
 
+	pp.Println(img)
 	model := img.ColorModel()
-	// pp.Println(model == color.NRGBA64Model)
-	if model == color.NRGBAModel {
+
+	switch model {
+	case types.RGBModel:
+		if rgbImage, ok := img.(*types.RGBImage); ok {
+			return rgbImage, nil
+		}
+		return nil, errors.New("unable to cast to an rgb image")
+	case types.BGRModel:
+		if bgrImage, ok := img.(*types.BGRImage); ok {
+			return bgrImage, nil
+		}
+		return nil, errors.New("unable to cast to an bgr image")
+	case color.NRGBAModel:
 		if rgbaImage, ok := img.(*image.NRGBA); ok {
 			return fromNRGBA(ctx, rgbaImage)
 		}
 		return nil, errors.New("unable to cast to an nrgba image")
-	}
-
-	if model == color.RGBAModel {
+	case color.RGBAModel:
 		if rgbaImage, ok := img.(*image.RGBA); ok {
 			return fromRGBA(ctx, rgbaImage)
 		}

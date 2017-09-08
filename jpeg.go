@@ -7,7 +7,7 @@ import (
 	"github.com/rai-project/go-libjpeg"
 )
 
-func xxxinit() {
+func XXXinit() {
 	libJpegDecoder := func(r io.Reader) (image.Image, error) {
 		return jpeg.Decode(r, &jpeg.DecoderOptions{
 			DisableFancyUpsampling: true,
