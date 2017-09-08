@@ -1,6 +1,9 @@
 package image
 
-import "github.com/rai-project/image/types"
+import (
+	"github.com/rai-project/image/types"
+	context "golang.org/x/net/context"
+)
 
 type Options struct {
 	resizeWidth  int
@@ -8,6 +11,7 @@ type Options struct {
 	mode         types.Mode
 	mean         [3]float32
 	layout       layout
+	ctx          context.Context
 }
 
 type Option func(o *Options)

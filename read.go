@@ -4,8 +4,6 @@ import (
 	"bufio"
 	"io"
 
-	"golang.org/x/net/context"
-
 	"github.com/pkg/errors"
 	"github.com/rai-project/image/types"
 )
@@ -43,7 +41,12 @@ func getFormat(reader reader) (string, error) {
 	return "", errors.New("input is not a valid image format")
 }
 
-func Read(ctx context.Context, r io.Reader) (*types.RGBImage, error) {
+func Read(r io.Reader, opts ...Option) (*types.RGBImage, error) {
+	options := NewOptions()
+	for _, o := range opts {
+		o(options)
+	}
+
 	reader := asReader(r)
 	format, err := getFormat(reader)
 	if err != nil {
@@ -53,10 +56,7 @@ func Read(ctx context.Context, r io.Reader) (*types.RGBImage, error) {
 	if !ok {
 		return nil, errors.Errorf("invalid format %v", format)
 	}
-	ctx = context.WithValue(ctx, "options", &Options{
-		mode: types.RGBMode,
-	})
-	img, err := decodeReader(ctx, decoder, reader)
+	img, err := decodeReader(decoder, reader, options)
 	if err != nil {
 		return nil, errors.Wrap(err, "cannot decode reader")
 	}

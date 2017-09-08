@@ -4,8 +4,6 @@ import (
 	"image"
 	"image/color"
 
-	context "golang.org/x/net/context"
-
 	"github.com/pkg/errors"
 )
 
@@ -83,7 +81,43 @@ func (p *RGBImage) SubImage(r image.Rectangle) Image {
 	}
 }
 
-func (p *RGBImage) FillFromRGBAImage(ctx context.Context, rgbaImage *image.RGBA) error {
+func (p *RGBImage) FillFromRGBImage(rgbImage *RGBImage) error {
+	if p.Bounds() != rgbImage.Bounds() {
+		return errors.Errorf("the bounds %v and %v did not match", p.Bounds(), rgbImage.Bounds())
+	}
+
+	copy(p.Pix, rgbImage.Pix)
+
+	return nil
+}
+
+func (p *RGBImage) FillFromBGRImage(bgrImage *BGRImage) error {
+	if p.Bounds() != bgrImage.Bounds() {
+		return errors.Errorf("the bounds %v and %v did not match", p.Bounds(), bgrImage.Bounds())
+	}
+
+	width := bgrImage.Bounds().Dx()
+	height := bgrImage.Bounds().Dy()
+	stride := bgrImage.Stride
+
+	bgrImagePixels := bgrImage.Pix
+	rgbImagePixels := p.Pix
+	for y := 0; y < height; y++ {
+		rgbOffset := y * stride
+		bgrOffset := y * width
+		for x := 0; x < width; x++ {
+			rgbImagePixels[rgbOffset+0] = bgrImagePixels[bgrOffset+2]
+			rgbImagePixels[rgbOffset+1] = bgrImagePixels[bgrOffset+1]
+			rgbImagePixels[rgbOffset+2] = bgrImagePixels[bgrOffset+0]
+			rgbOffset += 3
+			bgrOffset += 3
+		}
+	}
+
+	return nil
+}
+
+func (p *RGBImage) FillFromRGBAImage(rgbaImage *image.RGBA) error {
 	if p.Bounds() != rgbaImage.Bounds() {
 		return errors.Errorf("the bounds %v and %v did not match", p.Bounds(), rgbaImage.Bounds())
 	}
@@ -109,7 +143,7 @@ func (p *RGBImage) FillFromRGBAImage(ctx context.Context, rgbaImage *image.RGBA)
 	return nil
 }
 
-func (p *RGBImage) FillFromYCBCRImage(ctx context.Context, ycImage *image.YCbCr) error {
+func (p *RGBImage) FillFromYCBCRImage(ycImage *image.YCbCr) error {
 	if p.Bounds() != ycImage.Bounds() {
 		return errors.Errorf("the bounds %v and %v did not match", p.Bounds(), ycImage.Bounds())
 	}
@@ -138,7 +172,7 @@ func (p *RGBImage) FillFromYCBCRImage(ctx context.Context, ycImage *image.YCbCr)
 	return nil
 }
 
-func (p *RGBImage) FillFromGrayImage(ctx context.Context, grayImage *image.Gray) error {
+func (p *RGBImage) FillFromGrayImage(grayImage *image.Gray) error {
 	if p.Bounds() != grayImage.Bounds() {
 		return errors.Errorf("the bounds %v and %v did not match", p.Bounds(), grayImage.Bounds())
 	}
@@ -165,7 +199,7 @@ func (p *RGBImage) FillFromGrayImage(ctx context.Context, grayImage *image.Gray)
 	return nil
 }
 
-func (p *RGBImage) FillFromNRGBAImage(ctx context.Context, nrgbaImage *image.NRGBA) error {
+func (p *RGBImage) FillFromNRGBAImage(nrgbaImage *image.NRGBA) error {
 	if p.Bounds() != nrgbaImage.Bounds() {
 		return errors.Errorf("the bounds %v and %v did not match", p.Bounds(), nrgbaImage.Bounds())
 	}

@@ -5,8 +5,6 @@ import (
 	"path/filepath"
 	"testing"
 
-	context "golang.org/x/net/context"
-
 	sourcepath "github.com/GeertJohan/go-sourcepath"
 	"github.com/stretchr/testify/assert"
 )
@@ -22,7 +20,7 @@ func TestImport1(t *testing.T) {
 	assert.NoError(t, err)
 	defer reader.Close()
 
-	img, err := Read(context.Background(), reader)
+	img, err := Read(reader)
 	assert.NoError(t, err)
 	assert.NotEmpty(t, img)
 }
@@ -33,7 +31,7 @@ func TestImport2(t *testing.T) {
 	assert.NoError(t, err)
 	defer reader.Close()
 
-	img, err := Read(context.Background(), reader)
+	img, err := Read(reader)
 	assert.NoError(t, err)
 	assert.NotEmpty(t, img)
 }
