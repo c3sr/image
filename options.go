@@ -16,7 +16,7 @@ type Options struct {
 
 type Option func(o *Options)
 
-func Resize(width, height int) Option {
+func Resized(width, height int) Option {
 	return func(o *Options) {
 		o.resizeWidth = width
 		o.resizeHeight = height

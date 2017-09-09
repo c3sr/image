@@ -3,6 +3,10 @@ package image
 import (
 	"image"
 	"image/draw"
+
+	"github.com/pkg/errors"
+	"github.com/rai-project/image/asm"
+	"github.com/rai-project/image/types"
 )
 
 func AsRGBA(src image.Image) *image.RGBA {
@@ -12,37 +16,25 @@ func AsRGBA(src image.Image) *image.RGBA {
 	return img
 }
 
-// func Resize(ctx context.Context, inputImage image.Image, width, height int) (image.Image, error) {
+func doResize(targetPixels []uint8, srcPixels []uint8, targetWidth, targetHeight, srcWidth, srcHeight int) error {
+	return asm.IResizeBilinear(targetPixels, srcPixels, targetWidth, targetHeight, srcWidth, srcHeight)
+}
 
-// 	if span, newCtx := opentracing.StartSpanFromContext(ctx, "ImageResize"); span != nil {
-// 		ctx = newCtx
-// 		defer span.Finish()
-// 	}
+func Resize(inputImage types.Image, width, height int) (types.Image, error) {
 
-// 	inputImage = AsRGBA(inputImage)
+	switch inputImage.(type) {
+	case *types.RGBImage:
+		out := types.NewRGBImage(image.Rect(0, 0, width, height))
+		inPix := inputImage.(*types.RGBImage).Pix
+		doResize(out.Pix, inPix, width, height, inputImage.Bounds().Dx(), inputImage.Bounds().Dy())
+		return out, nil
+	case *types.BGRImage:
+		out := types.NewBGRImage(image.Rect(0, 0, width, height))
+		inPix := inputImage.(*types.BGRImage).Pix
+		doResize(out.Pix, inPix, width, height, inputImage.Bounds().Dx(), inputImage.Bounds().Dy())
+		return out, nil
+	default:
+		return nil, errors.New("input image was neither an RGB nor a BGR image")
+	}
 
-// 	res := image.NewRGBA(image.Rectangle{
-// 		Min: image.Point{
-// 			X: 0,
-// 			Y: 0,
-// 		},
-// 		Max: image.Point{
-// 			X: width,
-// 			Y: height,
-// 		},
-// 	})
-// 	cfg, err := rez.PrepareConversion(res, inputImage)
-// 	if err != nil {
-// 		return nil, errors.Wrap(err, "unable to create resize configuration")
-// 	}
-// 	converter, err := rez.NewConverter(cfg, rez.NewBilinearFilter())
-// 	if err != nil {
-// 		return nil, errors.Wrap(err, "unable to create resize converter")
-// 	}
-// 	err = converter.Convert(res, inputImage)
-// 	if err != nil {
-// 		return nil, errors.Wrap(err, "unable to resize image")
-// 	}
-
-// 	return res, nil
-// }
+}

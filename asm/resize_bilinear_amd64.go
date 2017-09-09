@@ -20,18 +20,25 @@ func ResizeBilinear(inputImage *types.RGBImage, height int, width int) (*types.R
 	srcHeight := inputImage.Rect.Dy()
 	srcWidth := inputImage.Rect.Dx()
 
-	parallel.Line(height, func(start, end int) {
-		scale := float32(srcHeight) / float32(height)
-		dstOffset := start * width * 3
+	err := IResizeBilinear(res.Pix, inputImage.Pix, width, height, srcWidth, srcHeight)
+
+	return res, err
+}
+
+func IResizeBilinear(targetPixels []uint8, srcPixels []uint8, targetWidth, targetHeight, srcWidth, srcHeight int) error {
+
+	parallel.Line(targetHeight, func(start, end int) {
+		scale := float32(srcHeight) / float32(targetHeight)
+		dstOffset := start * targetWidth * 3
 		srcOffset := int(scale*float32(start)) * srcWidth * 3
 
 		__resize_bilinear(
-			unsafe.Pointer(&res.Pix[dstOffset]),
-			unsafe.Pointer(&inputImage.Pix[srcOffset]),
-			uint64(end-start), uint64(width),
-			uint64(int(scale*float32(end))-int(scale*float32(start))), uint64(srcWidth),
+			unsafe.Pointer(&targetPixels[dstOffset]),
+			unsafe.Pointer(&srcPixels[srcOffset]),
+			uint64(end-start), uint64(targetWidth),
+			uint64(scale*float32(end-start)), uint64(srcWidth),
 		)
 	})
 
-	return res, nil
+	return nil
 }
