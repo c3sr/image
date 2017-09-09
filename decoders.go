@@ -3,24 +3,11 @@ package image
 import (
 	"image"
 	"image/color"
-	"image/gif"
-	"image/jpeg"
-	"image/png"
 	"io"
 
 	"github.com/pkg/errors"
 
 	"github.com/rai-project/image/types"
-	"golang.org/x/image/bmp"
-)
-
-var (
-	imageFormatDecoders = map[string]func(io.Reader) (image.Image, error){
-		"jpeg": jpeg.Decode,
-		"png":  png.Decode,
-		"gif":  gif.Decode,
-		"bmp":  bmp.Decode,
-	}
 )
 
 func decodeReader(decoder func(io.Reader) (image.Image, error), reader io.Reader, options *Options) (types.Image, error) {

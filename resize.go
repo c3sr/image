@@ -2,19 +2,11 @@ package image
 
 import (
 	"image"
-	"image/draw"
 
 	"github.com/pkg/errors"
 	"github.com/rai-project/image/asm"
 	"github.com/rai-project/image/types"
 )
-
-func AsRGBA(src image.Image) *image.RGBA {
-	bounds := src.Bounds()
-	img := image.NewRGBA(bounds)
-	draw.Draw(img, bounds, src, bounds.Min, draw.Src)
-	return img
-}
 
 func doResize(targetPixels []uint8, srcPixels []uint8, targetWidth, targetHeight, srcWidth, srcHeight int) error {
 	return asm.IResizeBilinear(targetPixels, srcPixels, targetWidth, targetHeight, srcWidth, srcHeight)

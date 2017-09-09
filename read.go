@@ -41,7 +41,7 @@ func getFormat(reader reader) (string, error) {
 	return "", errors.New("input is not a valid image format")
 }
 
-func Read(r io.Reader, opts ...Option) (*types.RGBImage, error) {
+func Read(r io.Reader, opts ...Option) (types.Image, error) {
 	options := NewOptions()
 	for _, o := range opts {
 		o(options)
@@ -52,17 +52,27 @@ func Read(r io.Reader, opts ...Option) (*types.RGBImage, error) {
 	if err != nil {
 		return nil, err
 	}
-	decoder, ok := imageFormatDecoders[format]
-	if !ok {
-		return nil, errors.Errorf("invalid format %v", format)
+	decoder, err := getDecoder(format, options)
+	if err != nil {
+		return nil, err
 	}
 	img, err := decodeReader(decoder, reader, options)
 	if err != nil {
 		return nil, errors.Wrap(err, "cannot decode reader")
 	}
-	res, ok := img.(*types.RGBImage)
-	if !ok {
+
+	switch img.(type) {
+	case *types.RGBImage, *types.BGRImage:
+		if options.resizeWidth == 0 && options.resizeHeight == 0 {
+			return img, nil
+		}
+		if img.Bounds().Dx() == options.resizeWidth && img.Bounds().Dy() == options.resizeHeight {
+			return img, nil
+		}
+		return Resize(img, options.resizeWidth, options.resizeHeight)
+	default:
 		return nil, errors.New("invalid return type for image read")
 	}
-	return res, nil
+
+	return nil, errors.New("unreachable in image read")
 }
