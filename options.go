@@ -56,5 +56,6 @@ func NewOptions() *Options {
 		mean:   [3]float32{0, 0, 0},
 		mode:   types.RGBMode,
 		layout: HWCLayout,
+		ctx:    context.Background(),
 	}
 }
