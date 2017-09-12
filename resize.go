@@ -3,6 +3,7 @@ package image
 import (
 	"image"
 
+	opentracing "github.com/opentracing/opentracing-go"
 	"github.com/pkg/errors"
 	"github.com/rai-project/image/asm"
 	"github.com/rai-project/image/types"
@@ -18,19 +19,27 @@ func Resize(inputImage types.Image, opts ...Option) (types.Image, error) {
 		o(options)
 	}
 
-	width := options.resizeWidth
-	height := options.resizeHeight
+	srcWidth, srcHeight := inputImage.Bounds().Dx(), inputImage.Bounds().Dy()
+	targetWidth, targetHeight := options.resizeWidth, options.resizeHeight
+
+	if span, _ := opentracing.StartSpanFromContext(options.ctx, "ResizeImage"); span != nil {
+		span.SetTag("source_width", srcWidth)
+		span.SetTag("source_height", srcHeight)
+		span.SetTag("target_width", targetWidth)
+		span.SetTag("target_height", targetHeight)
+		defer span.Finish()
+	}
 
 	switch in := inputImage.(type) {
 	case *types.RGBImage:
-		out := types.NewRGBImage(image.Rect(0, 0, width, height))
+		out := types.NewRGBImage(image.Rect(0, 0, targetWidth, targetHeight))
 		inPix := in.Pix
-		doResize(out.Pix, inPix, width, height, inputImage.Bounds().Dx(), inputImage.Bounds().Dy())
+		doResize(out.Pix, inPix, targetWidth, targetHeight, srcWidth, srcHeight)
 		return out, nil
 	case *types.BGRImage:
-		out := types.NewBGRImage(image.Rect(0, 0, width, height))
+		out := types.NewBGRImage(image.Rect(0, 0, targetWidth, targetHeight))
 		inPix := in.Pix
-		doResize(out.Pix, inPix, width, height, inputImage.Bounds().Dx(), inputImage.Bounds().Dy())
+		doResize(out.Pix, inPix, targetWidth, targetHeight, srcWidth, srcHeight)
 		return out, nil
 	default:
 		return nil, errors.New("input image was neither an RGB nor a BGR image")

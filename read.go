@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"io"
 
+	opentracing "github.com/opentracing/opentracing-go"
 	"github.com/pkg/errors"
 	"github.com/rai-project/image/types"
 )
@@ -56,6 +57,13 @@ func Read(r io.Reader, opts ...Option) (types.Image, error) {
 	if err != nil {
 		return nil, err
 	}
+
+	if span, newCtx := opentracing.StartSpanFromContext(options.ctx, "ReadImage"); span != nil {
+		options.ctx = newCtx
+		span.SetTag("format", format)
+		defer span.Finish()
+	}
+
 	img, err := decodeReader(decoder, reader, options)
 	if err != nil {
 		return nil, errors.Wrap(err, "cannot decode reader")
