@@ -1,8 +1,8 @@
 package image
 
-type layout int
+type Layout int
 
 const (
-	HWCLayout layout = iota
+	HWCLayout Layout = iota
 	CHWLayout
 )

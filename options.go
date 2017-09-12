@@ -10,7 +10,7 @@ type Options struct {
 	resizeHeight int
 	mode         types.Mode
 	mean         [3]float32
-	layout       layout
+	layout       Layout
 	ctx          context.Context
 }
 
@@ -33,9 +33,15 @@ func MeanValue(mean float32) Option {
 	return Mean([3]float32{mean, mean, mean})
 }
 
-func Layout(layout layout) Option {
+func ChannelLayout(layout Layout) Option {
 	return func(o *Options) {
 		o.layout = layout
+	}
+}
+
+func Context(ctx context.Context) Option {
+	return func(o *Options) {
+		o.ctx = ctx
 	}
 }
 
