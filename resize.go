@@ -10,7 +10,6 @@ import (
 
 func doResize(targetPixels []uint8, srcPixels []uint8, targetWidth, targetHeight, srcWidth, srcHeight int) error {
 	return asm.IResizeBilinear(targetPixels, srcPixels, targetWidth, targetHeight, srcWidth, srcHeight)
-	// return asm.IResizeBilinearNative(targetPixels, srcPixels, targetWidth, targetHeight, srcWidth, srcHeight)
 }
 
 func Resize(inputImage types.Image, width, height int) (types.Image, error) {

@@ -8,45 +8,25 @@ import (
 	"github.com/rai-project/image/types"
 )
 
-func nativeResizeBilinear(in *types.RGBImage, height int, width int) (*types.RGBImage, error) {
-	inputImage := image.NewRGBA(in.Bounds())
-	for ii := 0; ii < in.Bounds().Dy(); ii++ {
-		for jj := 0; jj < in.Bounds().Dx(); jj++ {
-			inOffset := ii*in.Stride + jj
-			inputOffset := ii*inputImage.Stride + jj
+func nativeResizeBilinear(in types.Image, targetHeight, targetWidth int) (types.Image, error) {
 
-			inputImage.Pix[inputOffset+0] = in.Pix[inOffset+0]
-			inputImage.Pix[inputOffset+1] = in.Pix[inOffset+1]
-			inputImage.Pix[inputOffset+2] = in.Pix[inOffset+2]
-			inputImage.Pix[inputOffset+3] = 0xFF
+	srcHeight := in.Bounds().Dy()
+	srcWidth := in.Bounds().Dx()
 
-			inOffset += 3
-			inputOffset += 4
-		}
-
+	switch in := in.(type) {
+	case *types.RGBImage:
+		res := types.NewRGBImage(image.Rect(0, 0, targetWidth, targetHeight))
+		err := resizeBilinearNative(res.Pix, in.Pix, targetWidth, targetHeight, srcWidth, srcHeight)
+		return res, err
+	case *types.BGRImage:
+		res := types.NewBGRImage(image.Rect(0, 0, targetWidth, targetHeight))
+		err := resizeBilinearNative(res.Pix, in.Pix, targetWidth, targetHeight, srcWidth, srcHeight)
+		return res, err
 	}
-
-	tmp := image.NewRGBA(image.Rect(0, 0, width, height))
-	cfg, err := rez.PrepareConversion(tmp, inputImage)
-	if err != nil {
-		return nil, errors.Wrap(err, "unable to create resize configuration")
-	}
-	converter, err := rez.NewConverter(cfg, rez.NewBilinearFilter())
-	if err != nil {
-		return nil, errors.Wrap(err, "unable to create resize converter")
-	}
-	err = converter.Convert(tmp, inputImage)
-	if err != nil {
-		return nil, errors.Wrap(err, "unable to resize image")
-	}
-
-	res := types.NewRGBImage(image.Rect(0, 0, width, height))
-	res.FillFromRGBAImage(tmp)
-
-	return res, nil
+	return nil, errors.New("invalid type while trying to resize image natively")
 }
 
-func IResizeBilinearNative(targetPixels []uint8, srcPixels []uint8, targetWidth, targetHeight, srcWidth, srcHeight int) error {
+func resizeBilinearNative(targetPixels []uint8, srcPixels []uint8, targetWidth, targetHeight, srcWidth, srcHeight int) error {
 
 	inputImage := image.NewRGBA(image.Rect(0, 0, srcWidth, srcHeight))
 	for ii := 0; ii < srcHeight; ii++ {

@@ -4,25 +4,33 @@
 package asm
 
 import (
+	"image"
 	"unsafe"
 
-	goimage "image"
-
 	"github.com/anthonynsimon/bild/parallel"
+	"github.com/pkg/errors"
 	"github.com/rai-project/image/types"
 )
 
 //go:noescape
 func __resize_bilinear(dst unsafe.Pointer, src unsafe.Pointer, dst_h uint64, dst_w uint64, src_h uint64, src_w uint64)
 
-func ResizeBilinear(inputImage *types.RGBImage, height int, width int) (*types.RGBImage, error) {
-	res := types.NewRGBImage(goimage.Rect(0, 0, width, height))
-	srcHeight := inputImage.Rect.Dy()
-	srcWidth := inputImage.Rect.Dx()
+func ResizeBilinear(in types.Image, targetHeight, targetWidth int) (types.Image, error) {
 
-	err := IResizeBilinear(res.Pix, inputImage.Pix, width, height, srcWidth, srcHeight)
+	srcHeight := in.Bounds().Dy()
+	srcWidth := in.Bounds().Dx()
 
-	return res, err
+	switch in := in.(type) {
+	case *types.RGBImage:
+		res := types.NewRGBImage(image.Rect(0, 0, targetWidth, targetHeight))
+		err := IResizeBilinear(res.Pix, in.Pix, targetWidth, targetHeight, srcWidth, srcHeight)
+		return res, err
+	case *types.BGRImage:
+		res := types.NewBGRImage(image.Rect(0, 0, targetWidth, targetHeight))
+		err := IResizeBilinear(res.Pix, in.Pix, targetWidth, targetHeight, srcWidth, srcHeight)
+		return res, err
+	}
+	return nil, errors.New("invalid type while trying to resize image natively")
 }
 
 func IResizeBilinear(targetPixels []uint8, srcPixels []uint8, targetWidth, targetHeight, srcWidth, srcHeight int) error {
