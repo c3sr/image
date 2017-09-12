@@ -14,6 +14,14 @@ import (
 )
 
 func getDecoder(format string, options *Options) (func(io.Reader) (image.Image, error), error) {
+	if format == "jpeg" && options.resizeWidth != 0 && options.resizeHeight != 0 {
+		return func(r io.Reader) (image.Image, error) {
+			return jpeg.Decode(r, &jpeg.DecoderOptions{
+				ScaleTarget:            image.Rect(0, 0, options.resizeWidth, options.resizeHeight),
+				DisableFancyUpsampling: true,
+			})
+		}, nil
+	}
 	imageFormatDecoders := map[string]func(io.Reader) (image.Image, error){
 		"jpeg": func(r io.Reader) (image.Image, error) {
 			return jpeg.Decode(r, &jpeg.DecoderOptions{
@@ -24,15 +32,6 @@ func getDecoder(format string, options *Options) (func(io.Reader) (image.Image, 
 		"gif": gif.Decode,
 		"bmp": bmp.Decode,
 	}
-	if format == "jpeg" && options.resizeHeight != 0 && options.resizeHeight != 0 {
-		return func(r io.Reader) (image.Image, error) {
-			return jpeg.Decode(r, &jpeg.DecoderOptions{
-				ScaleTarget:            image.Rect(0, 0, options.resizeWidth, options.resizeHeight),
-				DisableFancyUpsampling: true,
-			})
-		}, nil
-	}
-
 	if decoder, ok := imageFormatDecoders[format]; ok {
 		return decoder, nil
 	}

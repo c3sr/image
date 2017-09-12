@@ -104,7 +104,7 @@ func (p *BGRImage) FillFromRGBImage(rgbImage *RGBImage) error {
 	bgrImagePixels := p.Pix
 	for y := 0; y < height; y++ {
 		rgbOffset := y * stride
-		bgrOffset := y * width
+		bgrOffset := y * p.Stride
 		for x := 0; x < width; x++ {
 			bgrImagePixels[bgrOffset+0] = rgbImagePixels[rgbOffset+2]
 			bgrImagePixels[bgrOffset+1] = rgbImagePixels[rgbOffset+1]
@@ -130,7 +130,7 @@ func (p *BGRImage) FillFromRGBAImage(rgbaImage *image.RGBA) error {
 	bgrImagePixels := p.Pix
 	for y := 0; y < height; y++ {
 		rgbaOffset := y * stride
-		bgrOffset := y * width
+		bgrOffset := y * p.Stride
 		for x := 0; x < width; x++ {
 			bgrImagePixels[bgrOffset+0] = rgbaImagePixels[rgbaOffset+2]
 			bgrImagePixels[bgrOffset+1] = rgbaImagePixels[rgbaOffset+1]
@@ -156,7 +156,7 @@ func (p *BGRImage) FillFromNRGBAImage(nrgbaImage *image.NRGBA) error {
 	bgrImagePixels := p.Pix
 	for y := 0; y < height; y++ {
 		nrgbaOffset := y * stride
-		bgrOffset := y * width
+		bgrOffset := y * p.Stride
 		for x := 0; x < width; x++ {
 			bgrImagePixels[bgrOffset+0] = nrgbaImagePixels[nrgbaOffset+2]
 			bgrImagePixels[bgrOffset+1] = nrgbaImagePixels[nrgbaOffset+1]
@@ -179,7 +179,7 @@ func (p *BGRImage) FillFromYCBCRImage(ycImage *image.YCbCr) error {
 
 	bgrImagePixels := p.Pix
 	for y := 0; y < height; y++ {
-		bgrOffset := y * width
+		bgrOffset := y * p.Stride
 		for x := 0; x < width; x++ {
 			yi := ycImage.YOffset(x, y)
 			ci := ycImage.COffset(x, y)
@@ -210,7 +210,7 @@ func (p *BGRImage) FillFromGrayImage(grayImage *image.Gray) error {
 	bgrImagePixels := p.Pix
 	grayImagePixels := grayImage.Pix
 	for y := 0; y < height; y++ {
-		bgrOffset := y * width
+		bgrOffset := y * p.Stride
 		grayOffset := y * stride
 		for x := 0; x < width; x++ {
 			pix := grayImagePixels[grayOffset]

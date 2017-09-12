@@ -10,19 +10,20 @@ import (
 
 func doResize(targetPixels []uint8, srcPixels []uint8, targetWidth, targetHeight, srcWidth, srcHeight int) error {
 	return asm.IResizeBilinear(targetPixels, srcPixels, targetWidth, targetHeight, srcWidth, srcHeight)
+	// return asm.IResizeBilinearNative(targetPixels, srcPixels, targetWidth, targetHeight, srcWidth, srcHeight)
 }
 
 func Resize(inputImage types.Image, width, height int) (types.Image, error) {
 
-	switch inputImage.(type) {
+	switch in := inputImage.(type) {
 	case *types.RGBImage:
 		out := types.NewRGBImage(image.Rect(0, 0, width, height))
-		inPix := inputImage.(*types.RGBImage).Pix
+		inPix := in.Pix
 		doResize(out.Pix, inPix, width, height, inputImage.Bounds().Dx(), inputImage.Bounds().Dy())
 		return out, nil
 	case *types.BGRImage:
 		out := types.NewBGRImage(image.Rect(0, 0, width, height))
-		inPix := inputImage.(*types.BGRImage).Pix
+		inPix := in.Pix
 		doResize(out.Pix, inPix, width, height, inputImage.Bounds().Dx(), inputImage.Bounds().Dy())
 		return out, nil
 	default:
