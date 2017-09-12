@@ -12,7 +12,14 @@ func doResize(targetPixels []uint8, srcPixels []uint8, targetWidth, targetHeight
 	return asm.IResizeBilinear(targetPixels, srcPixels, targetWidth, targetHeight, srcWidth, srcHeight)
 }
 
-func Resize(inputImage types.Image, width, height int) (types.Image, error) {
+func Resize(inputImage types.Image, opts ...Option) (types.Image, error) {
+	options := NewOptions()
+	for _, o := range opts {
+		o(options)
+	}
+
+	width := options.resizeWidth
+	height := options.resizeHeight
 
 	switch in := inputImage.(type) {
 	case *types.RGBImage:

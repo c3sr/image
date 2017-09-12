@@ -69,7 +69,7 @@ func Read(r io.Reader, opts ...Option) (types.Image, error) {
 		if img.Bounds().Dx() == options.resizeWidth && img.Bounds().Dy() == options.resizeHeight {
 			return img, nil
 		}
-		return Resize(img, options.resizeWidth, options.resizeHeight)
+		return Resize(img, opts...)
 	default:
 		return nil, errors.New("invalid return type for image read")
 	}
