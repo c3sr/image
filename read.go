@@ -43,10 +43,7 @@ func getFormat(reader reader) (string, error) {
 }
 
 func Read(r io.Reader, opts ...Option) (types.Image, error) {
-	options := NewOptions()
-	for _, o := range opts {
-		o(options)
-	}
+	options := NewOptions(opts...)
 
 	reader := asReader(r)
 	format, err := getFormat(reader)
@@ -58,11 +55,9 @@ func Read(r io.Reader, opts ...Option) (types.Image, error) {
 		return nil, err
 	}
 
-	if span, newCtx := opentracing.StartSpanFromContext(options.ctx, "ReadImage"); span != nil {
-		options.ctx = newCtx
-		span.SetTag("format", format)
-		defer span.Finish()
-	}
+	span, ctx := options.tracer.StartSpanFromContext(options.ctx, "ReadImage", opentracing.Tags{"format": format})
+	options.ctx = ctx
+	defer span.Finish()
 
 	img, err := decodeReader(decoder, reader, options)
 	if err != nil {
