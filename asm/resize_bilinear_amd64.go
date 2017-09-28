@@ -1,4 +1,5 @@
 //+build !noasm
+//+build amd64
 //+build !appengine
 
 package asm
