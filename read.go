@@ -23,6 +23,7 @@ func asReader(r io.Reader) reader {
 	return bufio.NewReader(r)
 }
 
+// TODO: replace with https://github.com/h2non/filetype/blob/master/matchers/image.go
 func getFormat(reader reader) (string, error) {
 	formats := map[string]string{
 		"jpeg": "\xff\xd8",
