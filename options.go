@@ -2,7 +2,6 @@ package image
 
 import (
 	"github.com/rai-project/image/types"
-	"github.com/rai-project/tracer"
 	context "golang.org/x/net/context"
 )
 
@@ -12,7 +11,6 @@ type Options struct {
 	mode         types.Mode
 	mean         [3]float32
 	layout       Layout
-	tracer       tracer.Tracer
 	ctx          context.Context
 }
 
@@ -65,19 +63,12 @@ func Mode(mode types.Mode) Option {
 	}
 }
 
-func Tracer(tr tracer.Tracer) Option {
-	return func(o *Options) {
-		o.tracer = tr
-	}
-}
-
 func NewOptions(opts ...Option) *Options {
 	options := &Options{
 		mean:   [3]float32{0, 0, 0},
 		mode:   types.RGBMode,
 		layout: HWCLayout,
 		ctx:    context.Background(),
-		tracer: tracer.Std(),
 	}
 
 	for _, o := range opts {

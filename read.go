@@ -56,7 +56,7 @@ func Read(r io.Reader, opts ...Option) (types.Image, error) {
 		return nil, err
 	}
 
-	span, ctx := options.tracer.StartSpanFromContext(options.ctx, "ReadImage", opentracing.Tags{"format": format})
+	span, ctx := opentracing.StartSpanFromContext(options.ctx, "ReadImage", opentracing.Tags{"format": format})
 	options.ctx = ctx
 	defer span.Finish()
 
