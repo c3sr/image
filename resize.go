@@ -3,10 +3,10 @@ package image
 import (
 	"image"
 
-	opentracing "github.com/opentracing/opentracing-go"
 	"github.com/pkg/errors"
 	"github.com/rai-project/image/asm"
 	"github.com/rai-project/image/types"
+	"github.com/rai-project/tracer"
 )
 
 func doResize(targetPixels []uint8, srcPixels []uint8, targetWidth, targetHeight, srcWidth, srcHeight int) error {
@@ -19,7 +19,7 @@ func Resize(inputImage types.Image, opts ...Option) (types.Image, error) {
 	srcWidth, srcHeight := inputImage.Bounds().Dx(), inputImage.Bounds().Dy()
 	targetWidth, targetHeight := options.resizeWidth, options.resizeHeight
 
-	if span, _ := opentracing.StartSpanFromContext(options.ctx, "ResizeImage"); span != nil {
+	if span, _ := tracer.StartSpanFromContext(options.ctx, tracer.STEP_TRACE, "ResizeImage"); span != nil {
 		span.SetTag("source_width", srcWidth)
 		span.SetTag("source_height", srcHeight)
 		span.SetTag("target_width", targetWidth)

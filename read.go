@@ -7,6 +7,7 @@ import (
 	opentracing "github.com/opentracing/opentracing-go"
 	"github.com/pkg/errors"
 	"github.com/rai-project/image/types"
+	"github.com/rai-project/tracer"
 )
 
 // A reader is an io.Reader that can also peek ahead.
@@ -56,7 +57,7 @@ func Read(r io.Reader, opts ...Option) (types.Image, error) {
 		return nil, err
 	}
 
-	span, ctx := opentracing.StartSpanFromContext(options.ctx, "ReadImage", opentracing.Tags{"format": format})
+	span, ctx := tracer.StartSpanFromContext(options.ctx, tracer.STEP_TRACE, "ReadImage", opentracing.Tags{"format": format})
 	options.ctx = ctx
 	defer span.Finish()
 

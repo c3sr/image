@@ -5,14 +5,14 @@ import (
 	"image/color"
 	"io"
 
-	opentracing "github.com/opentracing/opentracing-go"
 	"github.com/pkg/errors"
 
 	"github.com/rai-project/image/types"
+	"github.com/rai-project/tracer"
 )
 
 func decodeReader(decoder func(io.Reader) (image.Image, error), reader io.Reader, options *Options) (types.Image, error) {
-	span, ctx := opentracing.StartSpanFromContext(options.ctx, "DecodeImage")
+	span, ctx := tracer.StartSpanFromContext(options.ctx, tracer.STEP_TRACE, "DecodeImage")
 	options.ctx = ctx
 	defer span.Finish()
 
