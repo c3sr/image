@@ -12,9 +12,10 @@ import (
 )
 
 func decodeReader(decoder func(io.Reader) (image.Image, error), reader io.Reader, options *Options) (types.Image, error) {
-	span, ctx := tracer.StartSpanFromContext(options.ctx, tracer.STEP_TRACE, "DecodeImage")
-	options.ctx = ctx
-	defer span.Finish()
+	if span, ctx := tracer.StartSpanFromContext(options.ctx, tracer.STEP_TRACE, "DecodeImage"); span != nil {
+		options.ctx = ctx
+		defer span.Finish()
+	}
 
 	img, err := decoder(reader)
 	if err != nil {
