@@ -19,12 +19,14 @@ func Resize(inputImage types.Image, opts ...Option) (types.Image, error) {
 	srcWidth, srcHeight := inputImage.Bounds().Dx(), inputImage.Bounds().Dy()
 	targetWidth, targetHeight := options.resizeWidth, options.resizeHeight
 
-	if span, _ := tracer.StartSpanFromContext(options.ctx, tracer.STEP_TRACE, "ResizeImage"); span != nil {
-		span.SetTag("source_width", srcWidth)
-		span.SetTag("source_height", srcHeight)
-		span.SetTag("target_width", targetWidth)
-		span.SetTag("target_height", targetHeight)
-		defer span.Finish()
+	if options.ctx != nil {
+		if span, _ := tracer.StartSpanFromContext(options.ctx, tracer.STEP_TRACE, "ResizeImage"); span != nil {
+			span.SetTag("source_width", srcWidth)
+			span.SetTag("source_height", srcHeight)
+			span.SetTag("target_width", targetWidth)
+			span.SetTag("target_height", targetHeight)
+			defer span.Finish()
+		}
 	}
 
 	switch in := inputImage.(type) {

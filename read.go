@@ -57,9 +57,11 @@ func Read(r io.Reader, opts ...Option) (types.Image, error) {
 		return nil, err
 	}
 
-	if span, ctx := tracer.StartSpanFromContext(options.ctx, tracer.STEP_TRACE, "ReadImage", opentracing.Tags{"format": format}); span != nil {
-		options.ctx = ctx
-		defer span.Finish()
+	if options.ctx != nil {
+		if span, ctx := tracer.StartSpanFromContext(options.ctx, tracer.STEP_TRACE, "ReadImage", opentracing.Tags{"format": format}); span != nil {
+			options.ctx = ctx
+			defer span.Finish()
+		}
 	}
 
 	img, err := decodeReader(decoder, reader, options)
