@@ -1,5 +1,4 @@
-//+build noasm
-//+build appengine
+//+build noasm appengine
 
 package asm
 
