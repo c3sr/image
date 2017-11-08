@@ -13,9 +13,6 @@ import (
 //go:noescape
 func __hwc2chw(result unsafe.Pointer, input unsafe.Pointer, height uint64, width uint64)
 
-//xxx go:noescape
-// func ___hwc2chw2(width uint32, height uint32, mean unsafe.Pointer, input unsafe.Pointer, result unsafe.Pointer)
-
 func Hwc2Chw(output []uint8, input []uint8, height int, width int) {
 	if !cpuid.SupportsAVX() {
 		nativeHwc2Chw(output, input, height, width)
