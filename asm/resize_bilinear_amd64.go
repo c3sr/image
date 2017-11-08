@@ -10,6 +10,7 @@ import (
 
 	"github.com/anthonynsimon/bild/parallel"
 	"github.com/pkg/errors"
+	"github.com/rai-project/cpu/cpuid"
 	"github.com/rai-project/image/types"
 )
 
@@ -17,6 +18,10 @@ import (
 func __resize_bilinear(dst unsafe.Pointer, src unsafe.Pointer, dst_h uint64, dst_w uint64, src_h uint64, src_w uint64)
 
 func ResizeBilinear(in types.Image, targetHeight, targetWidth int) (types.Image, error) {
+
+	if !cpuid.SupportsAVX() {
+		return nativeResizeBilinear(in, targetHeight, targetWidth)
+	}
 
 	srcHeight := in.Bounds().Dy()
 	srcWidth := in.Bounds().Dx()
