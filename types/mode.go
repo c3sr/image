@@ -8,4 +8,5 @@ const (
 	BGRMode
 	NonInterlacedRGBMode
 	NonInterlacedBGRMode
+  InvalidMode Mode = 9999
 )
