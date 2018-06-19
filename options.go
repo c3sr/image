@@ -1,8 +1,8 @@
 package image
 
 import (
+	context "context"
 	"github.com/rai-project/image/types"
-	context "golang.org/x/net/context"
 )
 
 type Options struct {
