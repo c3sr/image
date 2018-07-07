@@ -43,7 +43,7 @@ before_install:
   - go get github.com/minio/c2goasm
   - go get github.com/minio/asm2plan9s
   - curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
-  - ./travis-install-libjpeg-turbo.sh "$TURBO_VER"
+  - ./scripts/travis-install-libjpeg-turbo.sh "$TURBO_VER"
   # VIPS 8.3.3 requires Poppler 0.30 which is not released on Trusty.
   - >
     test "$LIBVIPS" != "master" -a "$LIBVIPS" \< "8.5" \
