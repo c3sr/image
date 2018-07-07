@@ -83,6 +83,7 @@ before_install:
   - export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$HOME/libvips/lib
   - vips --vips-version
 install:
+  - cd $TRAVIS_BUILD_DIR
   - dep ensure -v
   - rm -fr vendor/github.com/Sirupsen
   - find vendor -type f -exec sed -i 's/Sirupsen/sirupsen/g' {} +
