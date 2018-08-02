@@ -77,6 +77,13 @@
   branch = "master"
   name = "golang.org/x/image"
 
+[[override]]
+  branch = "master"
+  name = "github.com/minio/c2goasm"
+
+[[override]]
+  branch = "master"
+  name = "github.com/minio/asm2plan9s"
+
 [prune]
-  go-tests = true
-  unused-packages = true
+  go-tests = true 
