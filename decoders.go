@@ -13,7 +13,7 @@ import (
 
 func decodeReader(decoder func(io.Reader) (image.Image, error), reader io.Reader, options *Options) (types.Image, error) {
 	if options.ctx != nil {
-		if span, ctx := tracer.StartSpanFromContext(options.ctx, tracer.STEP_TRACE, "DecodeImage"); span != nil {
+		if span, ctx := tracer.StartSpanFromContext(options.ctx, tracer.APPLICATION_TRACE, "DecodeImage"); span != nil {
 			options.ctx = ctx
 			defer span.Finish()
 		}

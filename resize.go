@@ -20,7 +20,7 @@ func Resize(inputImage types.Image, opts ...Option) (types.Image, error) {
 	targetWidth, targetHeight := options.resizeWidth, options.resizeHeight
 
 	if options.ctx != nil {
-		if span, _ := tracer.StartSpanFromContext(options.ctx, tracer.STEP_TRACE, "ResizeImage"); span != nil {
+		if span, _ := tracer.StartSpanFromContext(options.ctx, tracer.APPLICATION_TRACE, "ResizeImage"); span != nil {
 			span.SetTag("source_width", srcWidth)
 			span.SetTag("source_height", srcHeight)
 			span.SetTag("target_width", targetWidth)
