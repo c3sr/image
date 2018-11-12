@@ -88,7 +88,7 @@ install:
   - dep ensure -v
   - rm -fr vendor/github.com/Sirupsen
   - find vendor -type f -exec sed -i 's/Sirupsen/sirupsen/g' {} +
-  - go build
+  - go build -tags=nolibjpeg
 script:
   - echo "Skip tests"
 after_script:
