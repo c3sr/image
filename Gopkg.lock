@@ -123,14 +123,6 @@
   version = "v1.2.1"
 
 [[projects]]
-  digest = "1:aba848b77ff362b03db51ac06379c36a120bc05b4cc6c5c74f6e6fa310454fa5"
-  name = "github.com/gogo/protobuf"
-  packages = ["proto"]
-  pruneopts = "T"
-  revision = "1adfc126b41513cc696b209667c8656ea7aac67c"
-  version = "v1.0.0"
-
-[[projects]]
   branch = "master"
   digest = "1:17a030e647213ad422df723c8ee8902328040dd74b7fc68cb016784baaf95657"
   name = "github.com/hashicorp/hcl"
@@ -313,8 +305,7 @@
   revision = "0e9aca10dd005adf793355171158783ff8ad930f"
 
 [[projects]]
-  branch = "master"
-  digest = "1:5ac7474674b8101e440216152a09c41e2e9c06ac09e92282bf9e07e2e85297a6"
+  digest = "1:9d4471473703e5ebf8e8f77770c254d2c874c36203624f98e249e0b48decdcb7"
   name = "github.com/rai-project/tracer"
   packages = [
     ".",
@@ -322,7 +313,8 @@
     "observer",
   ]
   pruneopts = "T"
-  revision = "1813199cbcd257a5b9bbeff9496a877303a24523"
+  revision = "99de7d4e81ce7fc75f5d12a31cddd5db8f233281"
+  version = "v0.2.0"
 
 [[projects]]
   branch = "master"
