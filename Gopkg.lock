@@ -310,7 +310,7 @@
   name = "github.com/rai-project/nvml-go"
   packages = ["."]
   pruneopts = "T"
-  revision = "1727b8458e25f8a7d41981dca1760fb2ddc8618a"
+  revision = "4e1189bcc320475bfec1306c719b78939c31a00d"
 
 [[projects]]
   branch = "master"
@@ -322,7 +322,7 @@
     "observer",
   ]
   pruneopts = "T"
-  revision = "99de7d4e81ce7fc75f5d12a31cddd5db8f233281"
+  revision = "41b5c08e8b8efd04718204bf1ba6b83a15959e13"
 
 [[projects]]
   branch = "master"
@@ -450,7 +450,7 @@
     "ssh/terminal",
   ]
   pruneopts = "T"
-  revision = "3d3f9f413869b949e48070b5bc593aa22cc2b8f2"
+  revision = "eb0de9b17e854e9b1ccd9963efafc79862359959"
 
 [[projects]]
   branch = "master"
@@ -466,7 +466,7 @@
   name = "golang.org/x/net"
   packages = ["context"]
   pruneopts = "T"
-  revision = "adae6a3d119ae4890b46832a2e88a95adc62b8e7"
+  revision = "fae4c4e3ad76c295c3d6d259f898136b4bf833a8"
 
 [[projects]]
   branch = "master"
@@ -485,7 +485,7 @@
     "windows",
   ]
   pruneopts = "T"
-  revision = "0cf1ed9e522b7dbb416f080a5c8003de9b702bf4"
+  revision = "4ed8d59d0b35e1e29334a206d1b3f38b1e5dfb31"
 
 [[projects]]
   digest = "1:6164911cb5e94e8d8d5131d646613ff82c14f5a8ce869de2f6d80d9889df8c5a"
@@ -503,12 +503,12 @@
   version = "v0.3.0"
 
 [[projects]]
-  digest = "1:342378ac4dcb378a5448dd723f0784ae519383532f5e70ade24132c4c8693202"
+  digest = "0:"
   name = "gopkg.in/yaml.v2"
   packages = ["."]
   pruneopts = "T"
-  revision = "5420a8b6744d3b0345ab293f6fcba19c978f1183"
-  version = "v2.2.1"
+  revision = "51d6538a90f86fe93ac480b35f37b2be17fef232"
+  version = "v2.2.2"
 
 [solve-meta]
   analyzer-name = "dep"
