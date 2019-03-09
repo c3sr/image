@@ -2,6 +2,7 @@ package image
 
 import (
 	context "context"
+
 	"github.com/rai-project/image/types"
 )
 
@@ -28,7 +29,7 @@ func Height(height int) Option {
 	}
 }
 
-func Resized(width, height int) Option {
+func Resized(height, width int) Option {
 	return func(o *Options) {
 		o.resizeWidth = width
 		o.resizeHeight = height
