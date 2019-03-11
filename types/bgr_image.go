@@ -117,6 +117,31 @@ func (p *BGRImage) FillFromRGBImage(rgbImage *RGBImage) error {
 	return nil
 }
 
+func (p *BGRImage) ToRGBAImage() *image.RGBA {
+	rgbaImage := image.NewRGBA(p.Bounds())
+
+	width := rgbaImage.Bounds().Dx()
+	height := rgbaImage.Bounds().Dy()
+	stride := rgbaImage.Stride
+
+	rgbaImagePixels := rgbaImage.Pix
+	bgrImagePixels := p.Pix
+	for y := 0; y < height; y++ {
+		rgbaOffset := y * stride
+		bgrOffset := y * p.Stride
+		for x := 0; x < width; x++ {
+			rgbaImagePixels[rgbaOffset+3] = 0xff
+			rgbaImagePixels[rgbaOffset+2] = bgrImagePixels[bgrOffset+0]
+			rgbaImagePixels[rgbaOffset+1] = bgrImagePixels[bgrOffset+1]
+			rgbaImagePixels[rgbaOffset+0] = bgrImagePixels[bgrOffset+2]
+			rgbaOffset += 4
+			bgrOffset += 3
+		}
+	}
+
+	return rgbaImage
+}
+
 func (p *BGRImage) FillFromRGBAImage(rgbaImage *image.RGBA) error {
 	if p.Bounds() != rgbaImage.Bounds() {
 		return errors.Errorf("the bounds %v and %v did not match", p.Bounds(), rgbaImage.Bounds())

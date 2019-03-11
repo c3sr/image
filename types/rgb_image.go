@@ -117,6 +117,31 @@ func (p *RGBImage) FillFromBGRImage(bgrImage *BGRImage) error {
 	return nil
 }
 
+func (p *RGBImage) ToRGBAImage() *image.RGBA {
+	rgbaImage := image.NewRGBA(p.Bounds())
+
+	width := rgbaImage.Bounds().Dx()
+	height := rgbaImage.Bounds().Dy()
+	stride := rgbaImage.Stride
+
+	rgbaImagePixels := rgbaImage.Pix
+	rgbImagePixels := p.Pix
+	for y := 0; y < height; y++ {
+		rgbaOffset := y * stride
+		rgbOffset := y * p.Stride
+		for x := 0; x < width; x++ {
+			rgbaImagePixels[rgbaOffset+0] = rgbImagePixels[rgbOffset+0]
+			rgbaImagePixels[rgbaOffset+1] = rgbImagePixels[rgbOffset+1]
+			rgbaImagePixels[rgbaOffset+2] = rgbImagePixels[rgbOffset+2]
+			rgbaImagePixels[rgbaOffset+3] = 0xFF
+			rgbaOffset += 4
+			rgbOffset += 3
+		}
+	}
+
+	return rgbaImage
+}
+
 func (p *RGBImage) FillFromRGBAImage(rgbaImage *image.RGBA) error {
 	if p.Bounds() != rgbaImage.Bounds() {
 		return errors.Errorf("the bounds %v and %v did not match", p.Bounds(), rgbaImage.Bounds())
@@ -157,14 +182,14 @@ func (p *RGBImage) FillFromYCBCRImage(ycImage *image.YCbCr) error {
 		for x := 0; x < width; x++ {
 			yi := ycImage.YOffset(x, y)
 			ci := ycImage.COffset(x, y)
-			r, g, b, _ := color.YCbCr{
+			r, g, b := color.YCbCrToRGB(
 				ycImage.Y[yi],
 				ycImage.Cb[ci],
 				ycImage.Cr[ci],
-			}.RGBA()
-			rgbImagePixels[rgbOffset+0] = uint8(r >> 8)
-			rgbImagePixels[rgbOffset+1] = uint8(g >> 8)
-			rgbImagePixels[rgbOffset+2] = uint8(b >> 8)
+			)
+			rgbImagePixels[rgbOffset+0] = r
+			rgbImagePixels[rgbOffset+1] = g
+			rgbImagePixels[rgbOffset+2] = b
 			rgbOffset += 3
 		}
 	}

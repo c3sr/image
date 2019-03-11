@@ -17,7 +17,7 @@ func TestResize(t *testing.T) {
 	assert.NoError(t, err)
 	assert.NotEmpty(t, img)
 
-	out, err := Resize(img, 10, 10)
+	out, err := Resize(img, Resized(10, 10))
 	assert.NoError(t, err)
 	assert.NotEmpty(t, out)
 }
