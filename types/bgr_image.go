@@ -194,35 +194,6 @@ func (p *BGRImage) FillFromNRGBAImage(nrgbaImage *image.NRGBA) error {
 	return nil
 }
 
-func (p *BGRImage) FillFromYCBCRImage(ycImage *image.YCbCr) error {
-	if p.Bounds() != ycImage.Bounds() {
-		return errors.Errorf("the bounds %v and %v did not match", p.Bounds(), ycImage.Bounds())
-	}
-
-	width := ycImage.Bounds().Dx()
-	height := ycImage.Bounds().Dy()
-
-	bgrImagePixels := p.Pix
-	for y := 0; y < height; y++ {
-		bgrOffset := y * p.Stride
-		for x := 0; x < width; x++ {
-			yi := ycImage.YOffset(x, y)
-			ci := ycImage.COffset(x, y)
-			r, g, b, _ := color.YCbCr{
-				ycImage.Y[yi],
-				ycImage.Cb[ci],
-				ycImage.Cr[ci],
-			}.RGBA()
-			bgrImagePixels[bgrOffset+0] = uint8(b >> 8)
-			bgrImagePixels[bgrOffset+1] = uint8(g >> 8)
-			bgrImagePixels[bgrOffset+2] = uint8(r >> 8)
-			bgrOffset += 3
-		}
-	}
-
-	return nil
-}
-
 func (p *BGRImage) FillFromGrayImage(grayImage *image.Gray) error {
 	if p.Bounds() != grayImage.Bounds() {
 		return errors.Errorf("the bounds %v and %v did not match", p.Bounds(), grayImage.Bounds())
