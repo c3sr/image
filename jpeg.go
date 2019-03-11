@@ -5,10 +5,9 @@ package image
 import (
 	"image"
 	"image/gif"
-	"image/jpeg"
 	"image/png"
 	"io"
-	"runtime"
+	"strings"
 
 	"github.com/pkg/errors"
 	libjpeg "github.com/rai-project/go-libjpeg"
@@ -16,17 +15,34 @@ import (
 	"golang.org/x/image/bmp"
 )
 
-func jpegDecoder(mode types.Mode) func(io.Reader) (image.Image, error) {
-	// if runtime.GOARCH == "ppc64le" {
-	// 	return jpeg.Decode
-	// }
-
-	decodeOpts := &libjpeg.DecoderOptions{
-		DCTMethod:              libjpeg.DCTISlow,
-		DisableFancyUpsampling: true,
-		// DisableBlockSmoothing:  true,
+func getDCTMethod(method string) (libjpeg.DCTMethod, error) {
+	switch strings.ToLower(method) {
+	case "slow", "integer_accurate", "dctislow":
+		return libjpeg.DCTISlow, nil
+	case "fast", "integer_fast", "dctifast":
+		return libjpeg.DCTIFast, nil
+	case "float", "dctfloat":
+		return libjpeg.DCTFloat, nil
+	default:
+		return libjpeg.DCTMethod(0), errors.Errorf("the DCT method %v specified is not valid", method)
 	}
+}
+
+func jpegDecoder(options *Options) func(io.Reader) (image.Image, error) {
 	return func(r io.Reader) (image.Image, error) {
+		dctMethod, err := getDCTMethod(options.dctMethod)
+		if err != nil {
+			return nil, err
+		}
+
+		mode := options.mode
+
+		decodeOpts := &libjpeg.DecoderOptions{
+			DCTMethod:              dctMethod,
+			DisableFancyUpsampling: true,
+			// DisableBlockSmoothing:  true,
+		}
+
 		if mode == types.RGBMode || mode == types.BGRMode {
 			return libjpeg.DecodeIntoRGB(r, decodeOpts)
 		}
@@ -36,14 +52,19 @@ func jpegDecoder(mode types.Mode) func(io.Reader) (image.Image, error) {
 
 func getDecoder(format string, options *Options) (func(io.Reader) (image.Image, error), error) {
 	if format == "jpeg" && options.resizeWidth != 0 && options.resizeHeight != 0 {
-		if runtime.GOARCH == "ppc64le" {
-			return jpeg.Decode, nil
-		}
+		// if runtime.GOARCH == "ppc64le" {
+		// 	return jpeg.Decode, nil
+		// }
 		return func(r io.Reader) (image.Image, error) {
 			mode := options.mode
+			dctMethod, err := getDCTMethod(options.dctMethod)
+			if err != nil {
+				return nil, err
+			}
+
 			decodeOpts := &libjpeg.DecoderOptions{
 				ScaleTarget:            image.Rect(0, 0, options.resizeWidth, options.resizeHeight),
-				DCTMethod:              libjpeg.DCTISlow,
+				DCTMethod:              dctMethod,
 				DisableFancyUpsampling: true,
 				// DisableBlockSmoothing:  true,
 			}
@@ -54,7 +75,7 @@ func getDecoder(format string, options *Options) (func(io.Reader) (image.Image, 
 		}, nil
 	}
 	imageFormatDecoders := map[string]func(io.Reader) (image.Image, error){
-		"jpeg": jpegDecoder(options.mode),
+		"jpeg": jpegDecoder(options),
 		"png":  png.Decode,
 		"gif":  gif.Decode,
 		"bmp":  bmp.Decode,

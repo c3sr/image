@@ -12,6 +12,7 @@ type Options struct {
 	mode         types.Mode
 	mean         [3]float32
 	layout       Layout
+	dctMethod    string
 	ctx          context.Context
 }
 
@@ -64,12 +65,19 @@ func Mode(mode types.Mode) Option {
 	}
 }
 
+func DCTMethod(method string) Option {
+	return func(o *Options) {
+		o.dctMethod = method
+	}
+}
+
 func NewOptions(opts ...Option) *Options {
 	options := &Options{
-		mean:   [3]float32{0, 0, 0},
-		mode:   types.RGBMode,
-		layout: HWCLayout,
-		ctx:    context.Background(),
+		mean:      [3]float32{0, 0, 0},
+		mode:      types.RGBMode,
+		layout:    HWCLayout,
+		dctMethod: "INTEGER_ACCURATE",
+		ctx:       context.Background(),
 	}
 
 	for _, o := range opts {
