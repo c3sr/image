@@ -4,6 +4,9 @@ type ResizeAlgorithm int
 
 const (
 	ResizeAlgorithmLinear ResizeAlgorithm = iota
-	ResizeAlgorithmBilinear
+	ResizeAlgorithmLinearASM
+	ResizeAlgorithmHermite
 	ResizeAlgorithmNearestNeighbor
+	ResizeAlgorithmBiLinear    = ResizeAlgorithmLinear
+	ResizeAlgorithmBiLinearASM = ResizeAlgorithmLinearASM
 )

@@ -4,6 +4,7 @@ import (
 	"image"
 
 	"github.com/bamiaux/rez"
+	"github.com/disintegration/imaging"
 	"github.com/pkg/errors"
 	"github.com/rai-project/image/types"
 )
@@ -27,6 +28,15 @@ func nativeResizeBilinear(in types.Image, targetHeight, targetWidth int) (types.
 }
 
 func resizeBilinearNative(targetPixels []uint8, srcPixels []uint8, targetWidth, targetHeight, srcWidth, srcHeight int) error {
+	inputImage := toRGBAImage(srcPixels, srcWidth, srcHeight)
+	resized := imaging.Resize(inputImage, targetWidth, targetHeight, imaging.Linear)
+	res := &types.RGBImage{targetPixels, 3 * targetWidth, resized.Bounds()}
+	res.FillFromNRGBAImage(resized)
+	return nil
+}
+
+// not used
+func resizeBilinearNativeOld(targetPixels []uint8, srcPixels []uint8, targetWidth, targetHeight, srcWidth, srcHeight int) error {
 	inputImage := toRGBAImage(srcPixels, srcWidth, srcHeight)
 
 	tmp := image.NewRGBA(image.Rect(0, 0, targetWidth, targetHeight))

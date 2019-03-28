@@ -84,7 +84,7 @@ func NewOptions(opts ...Option) *Options {
 		mode:            types.RGBMode,
 		layout:          HWCLayout,
 		dctMethod:       "INTEGER_ACCURATE",
-		resizeAlgorithm: types.ResizeAlgorithmBilinear,
+		resizeAlgorithm: types.ResizeAlgorithmLinear,
 		ctx:             context.Background(),
 	}
 

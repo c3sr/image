@@ -11,10 +11,12 @@ import (
 
 func doResize(targetPixels []uint8, srcPixels []uint8, targetWidth, targetHeight, srcWidth, srcHeight int, resizeAlgorithm types.ResizeAlgorithm) error {
 	switch resizeAlgorithm {
-	case types.ResizeAlgorithmLinear:
-		return asm.IResizeLinear(targetPixels, srcPixels, targetWidth, targetHeight, srcWidth, srcHeight)
-	case types.ResizeAlgorithmBilinear:
+	case types.ResizeAlgorithmBiLinear:
 		return asm.IResizeBilinear(targetPixels, srcPixels, targetWidth, targetHeight, srcWidth, srcHeight)
+	case types.ResizeAlgorithmBiLinearASM:
+		return asm.IResizeBilinearASM(targetPixels, srcPixels, targetWidth, targetHeight, srcWidth, srcHeight)
+	case types.ResizeAlgorithmHermite:
+		return asm.IResizeHermite(targetPixels, srcPixels, targetWidth, targetHeight, srcWidth, srcHeight)
 	case types.ResizeAlgorithmNearestNeighbor:
 		return asm.IResizeNearestNeighbor(targetPixels, srcPixels, targetWidth, targetHeight, srcWidth, srcHeight)
 	}
