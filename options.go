@@ -7,13 +7,14 @@ import (
 )
 
 type Options struct {
-	resizeWidth  int
-	resizeHeight int
-	mode         types.Mode
-	mean         [3]float32
-	layout       Layout
-	dctMethod    string
-	ctx          context.Context
+	resizeWidth     int
+	resizeHeight    int
+	resizeAlgorithm types.ResizeAlgorithm
+	mode            types.Mode
+	mean            [3]float32
+	layout          Layout
+	dctMethod       string
+	ctx             context.Context
 }
 
 type Option func(o *Options)
@@ -34,6 +35,12 @@ func Resized(height, width int) Option {
 	return func(o *Options) {
 		o.resizeWidth = width
 		o.resizeHeight = height
+	}
+}
+
+func ResizeAlgorithm(alg types.ResizeAlgorithm) Option {
+	return func(o *Options) {
+		o.resizeAlgorithm = alg
 	}
 }
 
@@ -73,11 +80,12 @@ func DCTMethod(method string) Option {
 
 func NewOptions(opts ...Option) *Options {
 	options := &Options{
-		mean:      [3]float32{0, 0, 0},
-		mode:      types.RGBMode,
-		layout:    HWCLayout,
-		dctMethod: "INTEGER_ACCURATE",
-		ctx:       context.Background(),
+		mean:            [3]float32{0, 0, 0},
+		mode:            types.RGBMode,
+		layout:          HWCLayout,
+		dctMethod:       "INTEGER_ACCURATE",
+		resizeAlgorithm: types.ResizeAlgorithmBilinear,
+		ctx:             context.Background(),
 	}
 
 	for _, o := range opts {

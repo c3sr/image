@@ -50,6 +50,14 @@
   revision = "29f4463c688b986c11f166b12734f69b58b5555f"
 
 [[projects]]
+  branch = "master"
+  digest = "0:"
+  name = "github.com/codahale/hdrhistogram"
+  packages = ["."]
+  pruneopts = "T"
+  revision = "3a0bb77429bd3a61596f5e8a3172445844342120"
+
+[[projects]]
   digest = "0:"
   name = "github.com/coreos/etcd"
   packages = [
@@ -230,10 +238,11 @@
   revision = "a7a7e747782c021caa5c44ef98157f761bf56970"
 
 [[projects]]
-  digest = "1:841fcba20c9b41a7519f3910b083d16be2c3479cc282859333fe07145c5b9a9a"
+  digest = "0:"
   name = "github.com/opentracing/opentracing-go"
   packages = [
     ".",
+    "ext",
     "log",
   ]
   pruneopts = "T"
@@ -307,6 +316,14 @@
 [[projects]]
   branch = "master"
   digest = "0:"
+  name = "github.com/rai-project/machine"
+  packages = ["os"]
+  pruneopts = "T"
+  revision = "b26f7a57dca483d2414afc2d0ea0f17039ef5042"
+
+[[projects]]
+  branch = "master"
+  digest = "0:"
   name = "github.com/rai-project/nvml-go"
   packages = ["."]
   pruneopts = "T"
@@ -319,7 +336,9 @@
   packages = [
     ".",
     "defaults",
+    "jaeger",
     "observer",
+    "utils",
   ]
   pruneopts = "T"
   revision = "41b5c08e8b8efd04718204bf1ba6b83a15959e13"
@@ -331,6 +350,14 @@
   packages = ["."]
   pruneopts = "T"
   revision = "be23e9dad62b9c5de665f502450144abd61d31a6"
+
+[[projects]]
+  branch = "master"
+  digest = "0:"
+  name = "github.com/rai-project/uuid"
+  packages = ["."]
+  pruneopts = "T"
+  revision = "2a4c8b922cc6a17bd16f236d4bb06134972289f2"
 
 [[projects]]
   branch = "master"
@@ -412,6 +439,36 @@
   pruneopts = "T"
   revision = "f35b8ab0b5a2cef36673838d662e249dd9c94686"
   version = "v1.2.2"
+
+[[projects]]
+  digest = "0:"
+  name = "github.com/uber/jaeger-client-go"
+  packages = [
+    ".",
+    "internal/baggage",
+    "internal/spanlog",
+    "internal/throttler",
+    "log",
+    "thrift",
+    "thrift-gen/agent",
+    "thrift-gen/jaeger",
+    "thrift-gen/sampling",
+    "thrift-gen/zipkincore",
+    "transport/zipkin",
+    "utils",
+    "zipkin",
+  ]
+  pruneopts = "T"
+  revision = "1a782e2da844727691fef1757c72eb190c2909f0"
+  version = "v2.15.0"
+
+[[projects]]
+  digest = "0:"
+  name = "github.com/uber/jaeger-lib"
+  packages = ["metrics"]
+  pruneopts = "T"
+  revision = "ed3a127ec5fef7ae9ea95b01b542c47fbd999ce5"
+  version = "v1.5.0"
 
 [[projects]]
   digest = "1:a71a71ef17f7d6fc49b0572bb3d1253a5408dd5abb48d8908ac64a6e3f919ba8"
@@ -517,6 +574,7 @@
     "github.com/GeertJohan/go-sourcepath",
     "github.com/anthonynsimon/bild/parallel",
     "github.com/bamiaux/rez",
+    "github.com/k0kubun/pp",
     "github.com/opentracing/opentracing-go",
     "github.com/pkg/errors",
     "github.com/rai-project/config",
@@ -524,6 +582,7 @@
     "github.com/rai-project/go-libjpeg",
     "github.com/rai-project/logger",
     "github.com/rai-project/tracer",
+    "github.com/rai-project/tracer/jaeger",
     "github.com/sirupsen/logrus",
     "github.com/stretchr/testify/assert",
     "golang.org/x/image/bmp",

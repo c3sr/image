@@ -9,8 +9,16 @@ import (
 	"github.com/rai-project/tracer"
 )
 
-func doResize(targetPixels []uint8, srcPixels []uint8, targetWidth, targetHeight, srcWidth, srcHeight int) error {
-	return asm.IResizeBilinear(targetPixels, srcPixels, targetWidth, targetHeight, srcWidth, srcHeight)
+func doResize(targetPixels []uint8, srcPixels []uint8, targetWidth, targetHeight, srcWidth, srcHeight int, resizeAlgorithm types.ResizeAlgorithm) error {
+	switch resizeAlgorithm {
+	case types.ResizeAlgorithmLinear:
+		return asm.IResizeLinear(targetPixels, srcPixels, targetWidth, targetHeight, srcWidth, srcHeight)
+	case types.ResizeAlgorithmBilinear:
+		return asm.IResizeBilinear(targetPixels, srcPixels, targetWidth, targetHeight, srcWidth, srcHeight)
+	case types.ResizeAlgorithmNearestNeighbor:
+		return asm.IResizeNearestNeighbor(targetPixels, srcPixels, targetWidth, targetHeight, srcWidth, srcHeight)
+	}
+	return errors.New("invalid resize algorithm")
 }
 
 func Resize(inputImage types.Image, opts ...Option) (types.Image, error) {
@@ -45,12 +53,12 @@ func Resize(inputImage types.Image, opts ...Option) (types.Image, error) {
 	case *types.RGBImage:
 		out := types.NewRGBImage(image.Rect(0, 0, targetWidth, targetHeight))
 		inPix := in.Pix
-		doResize(out.Pix, inPix, targetWidth, targetHeight, srcWidth, srcHeight)
+		doResize(out.Pix, inPix, targetWidth, targetHeight, srcWidth, srcHeight, options.resizeAlgorithm)
 		return out, nil
 	case *types.BGRImage:
 		out := types.NewBGRImage(image.Rect(0, 0, targetWidth, targetHeight))
 		inPix := in.Pix
-		doResize(out.Pix, inPix, targetWidth, targetHeight, srcWidth, srcHeight)
+		doResize(out.Pix, inPix, targetWidth, targetHeight, srcWidth, srcHeight, options.resizeAlgorithm)
 		return out, nil
 	default:
 		return nil, errors.New("input image was neither an RGB nor a BGR image")
