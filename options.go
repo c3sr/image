@@ -7,14 +7,16 @@ import (
 )
 
 type Options struct {
+	ctx             context.Context
 	resizeWidth     int
 	resizeHeight    int
 	resizeAlgorithm types.ResizeAlgorithm
+	maxDimension    *int
+	keepAspectRatio *bool
 	mode            types.Mode
 	mean            [3]float32
 	layout          Layout
 	dctMethod       string
-	ctx             context.Context
 }
 
 type Option func(o *Options)
@@ -35,6 +37,18 @@ func Resized(height, width int) Option {
 	return func(o *Options) {
 		o.resizeWidth = width
 		o.resizeHeight = height
+	}
+}
+
+func KeepAspectRatio(keepAspectRatio bool) Option {
+	return func(o *Options) {
+		o.keepAspectRatio = &keepAspectRatio
+	}
+}
+
+func MaxDimension(dim int) Option {
+	return func(o *Options) {
+		o.maxDimension = &dim
 	}
 }
 
@@ -81,6 +95,8 @@ func DCTMethod(method string) Option {
 func NewOptions(opts ...Option) *Options {
 	options := &Options{
 		mean:            [3]float32{0, 0, 0},
+		maxDimension:    nil,
+		keepAspectRatio: nil,
 		mode:            types.RGBMode,
 		layout:          HWCLayout,
 		dctMethod:       "INTEGER_ACCURATE",

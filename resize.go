@@ -23,6 +23,30 @@ func doResize(targetPixels []uint8, srcPixels []uint8, targetWidth, targetHeight
 	return errors.New("invalid resize algorithm")
 }
 
+func intMax(a, b int) int {
+	if a > b {
+		return a
+	}
+	return b
+}
+
+func computeScaledDimension(inputImage types.Image, opts *Options) (int, int) {
+	if opts.maxDimension == nil {
+		return 0, 0
+	}
+	maxDimension := *opts.maxDimension
+	imgWidth, imgHeight := inputImage.Bounds().Dx(), inputImage.Bounds().Dy()
+	if opts.keepAspectRatio == nil || *opts.keepAspectRatio == false {
+		return intMax(imgWidth, maxDimension), intMax(imgHeight, maxDimension)
+	}
+
+	resizeRatio := float32(maxDimension) / float32(intMax(imgWidth, imgHeight))
+	width := int(resizeRatio * float32(imgWidth))
+	height := int(resizeRatio * float32(imgHeight))
+
+	return width, height
+}
+
 func Resize(inputImage types.Image, opts ...Option) (types.Image, error) {
 	options := NewOptions(opts...)
 
@@ -35,6 +59,10 @@ func Resize(inputImage types.Image, opts ...Option) (types.Image, error) {
 
 	if targetHeight == 0 {
 		targetHeight = srcHeight
+	}
+
+	if options.maxDimension != nil {
+		targetWidth, targetHeight = computeScaledDimension(inputImage, options)
 	}
 
 	if targetWidth == srcWidth && targetHeight == srcHeight {

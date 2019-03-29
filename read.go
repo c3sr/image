@@ -71,10 +71,10 @@ func Read(r io.Reader, opts ...Option) (types.Image, error) {
 
 	switch img.(type) {
 	case *types.RGBImage, *types.BGRImage:
-		if options.resizeWidth == 0 && options.resizeHeight == 0 {
+		if options.resizeWidth == 0 && options.resizeHeight == 0 && options.maxDimension == nil {
 			return img, nil
 		}
-		if img.Bounds().Dx() == options.resizeWidth && img.Bounds().Dy() == options.resizeHeight {
+		if img.Bounds().Dx() == options.resizeWidth && img.Bounds().Dy() == options.resizeHeight && options.maxDimension == nil {
 			return img, nil
 		}
 		return Resize(img, opts...)
