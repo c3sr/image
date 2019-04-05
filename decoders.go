@@ -5,8 +5,6 @@ import (
 	"image/color"
 	"io"
 
-	"github.com/k0kubun/pp"
-
 	"github.com/pkg/errors"
 
 	"github.com/rai-project/image/types"
@@ -38,7 +36,7 @@ func decodeReader(decoder func(io.Reader) (image.Image, error), reader io.Reader
 
 	switch model {
 	case types.RGBModel:
-		pp.Println("RGB Image")
+		// pp.Println("RGB Image")
 		if rgbImage, ok := img.(*types.RGBImage); ok {
 			return fromRGB(rgbImage, options)
 		}
@@ -49,13 +47,13 @@ func decodeReader(decoder func(io.Reader) (image.Image, error), reader io.Reader
 		}
 		return nil, errors.New("unable to cast from a bgr image")
 	case color.RGBAModel:
-		pp.Println("RGBA Image")
+		// pp.Println("RGBA Image")
 		if rgbaImage, ok := img.(*image.RGBA); ok {
 			return fromRGBA(rgbaImage, options)
 		}
 		return nil, errors.New("unable to cast from an rgba image")
 	case color.NRGBAModel:
-		pp.Println("NRGBAModel Image")
+		// pp.Println("NRGBAModel Image")
 		if nrgbaImage, ok := img.(*image.NRGBA); ok {
 			return fromNRGBA(nrgbaImage, options)
 		}
