@@ -3,6 +3,7 @@ package image
 import (
 	"image"
 
+	opentracing "github.com/opentracing/opentracing-go"
 	"github.com/pkg/errors"
 	"github.com/rai-project/image/asm"
 	"github.com/rai-project/image/types"
@@ -69,7 +70,7 @@ func Resize(inputImage types.Image, opts ...Option) (types.Image, error) {
 		return inputImage, nil
 	}
 
-	if options.ctx != nil {
+	if opentracing.SpanFromContext(options.ctx) != nil {
 		if span, _ := tracer.StartSpanFromContext(options.ctx, tracer.APPLICATION_TRACE, "ResizeImage"); span != nil {
 			span.SetTag("source_width", srcWidth)
 			span.SetTag("source_height", srcHeight)
