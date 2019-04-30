@@ -3,6 +3,7 @@
 package types
 
 // #include "ConvertYCbCr.h"
+// #cgo CFLAGS: -std=c11
 import "C"
 
 import (
