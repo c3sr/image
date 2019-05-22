@@ -57,7 +57,7 @@ func Read(r io.Reader, opts ...Option) (types.Image, error) {
 		return nil, err
 	}
 
-	if opentracing.SpanFromContext(options.ctx) != nil {
+	if options.ctx != nil && opentracing.SpanFromContext(options.ctx) != nil {
 		if span, ctx := tracer.StartSpanFromContext(options.ctx, tracer.APPLICATION_TRACE, "read", opentracing.Tags{"format": format}); span != nil {
 			options.ctx = ctx
 			defer span.Finish()
