@@ -18,6 +18,10 @@ type RGBImage struct {
 	Rect image.Rectangle
 }
 
+func (p RGBImage) Channels() int { return 3 }
+
+func (p RGBImage) Pixels() []uint8 { return p.Pix }
+
 func (p RGBImage) ColorModel() color.Model { return RGBModel }
 
 func (p RGBImage) Bounds() image.Rectangle { return p.Rect }

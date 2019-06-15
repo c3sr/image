@@ -18,6 +18,10 @@ type BGRImage struct {
 	Rect image.Rectangle
 }
 
+func (p BGRImage) Channels() int { return 3 }
+
+func (p BGRImage) Pixels() []uint8 { return p.Pix }
+
 func (p BGRImage) ColorModel() color.Model { return BGRModel }
 
 func (p BGRImage) Bounds() image.Rectangle { return p.Rect }

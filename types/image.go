@@ -6,5 +6,7 @@ import (
 
 type Image interface {
 	image.Image
+	Channels() int
+	Pixels() []uint8
 	Mode() Mode
 }
