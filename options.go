@@ -35,8 +35,18 @@ func Height(height int) Option {
 
 func Resized(height, width int) Option {
 	return func(o *Options) {
-		o.resizeWidth = width
 		o.resizeHeight = height
+		o.resizeWidth = width
+	}
+}
+
+func ResizeShape(shape []int) Option {
+	if len(shape) != 2 {
+		panic("expecting a resize shape of length 2 of the form height,width")
+	}
+	return func(o *Options) {
+		o.resizeHeight = shape[0]
+		o.resizeWidth = shape[1]
 	}
 }
 
