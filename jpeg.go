@@ -24,7 +24,8 @@ func getDCTMethod(method string) (libjpeg.DCTMethod, error) {
 	case "float", "dctfloat":
 		return libjpeg.DCTFloat, nil
 	default:
-		return libjpeg.DCTMethod(0), errors.Errorf("the DCT method %v specified is not valid", method)
+		var none libjpeg.DCTMethod
+		return none, errors.Errorf("the DCT method %v specified is not valid", method)
 	}
 }
 
