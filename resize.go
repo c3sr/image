@@ -71,7 +71,7 @@ func Resize(inputImage types.Image, opts ...Option) (types.Image, error) {
 	}
 
 	if opentracing.SpanFromContext(options.ctx) != nil {
-		if span, _ := tracer.StartSpanFromContext(options.ctx, tracer.APPLICATION_TRACE, "ResizeImage"); span != nil {
+		if span, _ := tracer.StartSpanFromContext(options.ctx, tracer.APPLICATION_TRACE, "resize"); span != nil {
 			span.SetTag("source_width", srcWidth)
 			span.SetTag("source_height", srcHeight)
 			span.SetTag("target_width", targetWidth)
