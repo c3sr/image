@@ -122,16 +122,16 @@
   revision = "6628880864ba48724ca5f7b63fe9995d4c5f3689"
 
 [[projects]]
-  digest = "1:cac592354abf9d569dd7ce41f561a74d871a8a7d6069b7eb3dab6c524480e9d8"
+  branch = "master"
+  digest = "1:6c8f7f7333bc8f2ddcb25508dea709fb817491f6cb4b8d10a2844e31652cce00"
   name = "github.com/c3sr/nvml-go"
   packages = ["."]
   pruneopts = "UT"
-  revision = "1727b8458e25f8a7d41981dca1760fb2ddc8618a"
-  version = "v0.1.0"
+  revision = "c893af65d8c554dae557672dc257f3849a1435db"
 
 [[projects]]
   branch = "master"
-  digest = "1:8f7984cbd043e5e5723595de0d48ae90b545c055ab18d5460a22cf822a64afc2"
+  digest = "1:0cf105d8fc35e34667e6b17cebf1dcf51c70d5e7daa191e85e0995e65a1fe97a"
   name = "github.com/c3sr/tracer"
   packages = [
     ".",
@@ -141,7 +141,7 @@
     "utils",
   ]
   pruneopts = "UT"
-  revision = "fab76ee234f980a0713496684008afd80dc7f1f5"
+  revision = "43da420e1ef6bf956c8dfd78d3cce306c1cfa781"
 
 [[projects]]
   branch = "master"
