@@ -6,8 +6,8 @@ import (
 	"strings"
 
 	"github.com/pkg/errors"
-	raiimage "github.com/rai-project/image"
-	"github.com/rai-project/image/types"
+	raiimage "github.com/c3sr/image"
+	"github.com/c3sr/image/types"
 )
 
 func Get(name string, opts ...raiimage.Option) (types.Image, error) {

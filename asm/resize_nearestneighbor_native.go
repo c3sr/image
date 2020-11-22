@@ -6,7 +6,7 @@ import (
 	"github.com/disintegration/imaging"
 
 	"github.com/pkg/errors"
-	"github.com/rai-project/image/types"
+	"github.com/c3sr/image/types"
 )
 
 func ResizeNearestNeighbor(inputImage types.Image, height int, width int) (types.Image, error) {

@@ -1,4 +1,4 @@
-# Image [![Build Status](https://travis-ci.org/rai-project/image.svg?branch=master)](https://travis-ci.org/rai-project/image)
+# Image [![Build Status](https://travis-ci.org/c3sr/image.svg?branch=master)](https://travis-ci.org/c3sr/image)
 
 ### ASM
 

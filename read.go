@@ -6,8 +6,8 @@ import (
 
 	opentracing "github.com/opentracing/opentracing-go"
 	"github.com/pkg/errors"
-	"github.com/rai-project/image/types"
-	"github.com/rai-project/tracer"
+	"github.com/c3sr/image/types"
+	"github.com/c3sr/tracer"
 )
 
 // A reader is an io.Reader that can also peek ahead.

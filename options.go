@@ -3,7 +3,7 @@ package image
 import (
 	context "context"
 
-	"github.com/rai-project/image/types"
+	"github.com/c3sr/image/types"
 )
 
 type Options struct {

@@ -10,8 +10,8 @@ import (
 
 	"github.com/anthonynsimon/bild/parallel"
 	"github.com/pkg/errors"
-	"github.com/rai-project/cpu/cpuid"
-	"github.com/rai-project/image/types"
+	"github.com/c3sr/cpu/cpuid"
+	"github.com/c3sr/image/types"
 )
 
 //go:noescape

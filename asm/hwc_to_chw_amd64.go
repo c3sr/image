@@ -7,7 +7,7 @@ import (
 	"unsafe"
 
 	"github.com/anthonynsimon/bild/parallel"
-	"github.com/rai-project/cpu/cpuid"
+	"github.com/c3sr/cpu/cpuid"
 )
 
 //go:noescape

@@ -1,6 +1,6 @@
 # Gopkg.toml example
 #
-# Refer to https://github.com/golang/dep/blob/master/docs/Gopkg.toml.md
+# Refer to https://golang.github.io/dep/docs/Gopkg.toml.html
 # for detailed Gopkg.toml documentation.
 #
 # required = ["github.com/user/thing/cmd/thing"]
@@ -31,59 +31,60 @@
 
 [[constraint]]
   name = "github.com/anthonynsimon/bild"
-  version = "0.10.0"
+  version = "0.13.0"
 
 [[constraint]]
   branch = "master"
   name = "github.com/bamiaux/rez"
 
 [[constraint]]
+  branch = "master"
+  name = "github.com/c3sr/config"
+
+[[constraint]]
+  branch = "master"
+  name = "github.com/c3sr/cpu"
+
+[[constraint]]
+  branch = "master"
+  name = "github.com/c3sr/go-libjpeg"
+
+[[constraint]]
+  branch = "master"
+  name = "github.com/c3sr/logger"
+
+[[constraint]]
+  branch = "master"
+  name = "github.com/c3sr/tracer"
+
+[[constraint]]
+  name = "github.com/disintegration/imaging"
+  version = "1.6.2"
+
+[[constraint]]
   name = "github.com/opentracing/opentracing-go"
-  version = "1.0.2"
+  version = "1.2.0"
 
 [[constraint]]
   name = "github.com/pkg/errors"
-  version = "0.8.0"
-
-[[constraint]]
-  branch = "master"
-  name = "github.com/rai-project/config"
-
-[[constraint]]
-  branch = "master"
-  name = "github.com/rai-project/cpu"
-
-[[constraint]]
-  branch = "master"
-  name = "github.com/rai-project/go-libjpeg"
-
-[[constraint]]
-  branch = "master"
-  name = "github.com/rai-project/logger"
-
-[[constraint]]
-  branch = "master"
-  name = "github.com/rai-project/tracer"
+  version = "0.8.1"
 
 [[constraint]]
   name = "github.com/sirupsen/logrus"
-  version = "1.4.1"
+  version = "1.7.0"
 
 [[constraint]]
   name = "github.com/stretchr/testify"
-  version = "1.2.2"
+  version = "1.6.1"
 
 [[constraint]]
   branch = "master"
   name = "golang.org/x/image"
 
-[[override]]
+[[constraint]]
   branch = "master"
-  name = "github.com/minio/c2goasm"
-
-[[override]]
-  branch = "master"
-  name = "github.com/minio/asm2plan9s"
+  name = "golang.org/x/net"
 
 [prune]
   go-tests = true
+  unused-packages = true

@@ -10,8 +10,8 @@ import (
 	"strings"
 
 	"github.com/pkg/errors"
-	libjpeg "github.com/rai-project/go-libjpeg"
-	"github.com/rai-project/image/types"
+	libjpeg "github.com/c3sr/go-libjpeg"
+	"github.com/c3sr/image/types"
 	"golang.org/x/image/bmp"
 )
 

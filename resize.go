@@ -5,9 +5,9 @@ import (
 
 	opentracing "github.com/opentracing/opentracing-go"
 	"github.com/pkg/errors"
-	"github.com/rai-project/image/asm"
-	"github.com/rai-project/image/types"
-	"github.com/rai-project/tracer"
+	"github.com/c3sr/image/asm"
+	"github.com/c3sr/image/types"
+	"github.com/c3sr/tracer"
 )
 
 func doResize(targetPixels []uint8, srcPixels []uint8, targetWidth, targetHeight, srcWidth, srcHeight int, resizeAlgorithm types.ResizeAlgorithm) error {

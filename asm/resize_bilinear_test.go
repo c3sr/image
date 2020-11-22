@@ -5,7 +5,7 @@ import (
 	"math/rand"
 	"testing"
 
-	"github.com/rai-project/image/types"
+	"github.com/c3sr/image/types"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -33,6 +33,7 @@ func benchmarkResizeBilinear(b *testing.B, height, width, channels int) {
 	}
 }
 
+/*
 func benchmarkNativeResizeBilinear(b *testing.B, height, width, channels int) {
 	input := randomRGBAImage(height, width, channels)
 	for ii := 0; ii < b.N; ii++ {
@@ -40,27 +41,34 @@ func benchmarkNativeResizeBilinear(b *testing.B, height, width, channels int) {
 		assert.NoError(b, err)
 	}
 }
+*/
 
 func BenchmarkResizeBilinear200x200(b *testing.B) {
 	benchmarkResizeBilinear(b, 200, 200, 3)
 }
 
+/*
 func BenchmarkNativeResizeBilinear200x200(b *testing.B) {
 	benchmarkNativeResizeBilinear(b, 200, 200, 3)
 }
+*/
 
 func BenchmarkResizeBilinear500x500(b *testing.B) {
 	benchmarkResizeBilinear(b, 500, 500, 3)
 }
 
+/*
 func BenchmarkNativeResizeBilinear500x500(b *testing.B) {
 	benchmarkNativeResizeBilinear(b, 500, 500, 3)
 }
+*/
 
 func BenchmarkResizeBilinear1000x1000(b *testing.B) {
 	benchmarkResizeBilinear(b, 1000, 1000, 3)
 }
 
+/*
 func BenchmarkNativeResizeBilinear1000x1000(b *testing.B) {
 	benchmarkNativeResizeBilinear(b, 1000, 1000, 3)
 }
+*/

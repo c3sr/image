@@ -8,7 +8,7 @@ import (
 	"testing"
 
 	sourcepath "github.com/GeertJohan/go-sourcepath"
-	"github.com/rai-project/image/types"
+	"github.com/c3sr/image/types"
 	"github.com/stretchr/testify/assert"
 )
 

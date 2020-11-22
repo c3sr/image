@@ -3,7 +3,7 @@
 package asm
 
 import (
-	"github.com/rai-project/image/types"
+	"github.com/c3sr/image/types"
 )
 
 func ResizeBilinear(inputImage types.Image, height int, width int) (types.Image, error) {
