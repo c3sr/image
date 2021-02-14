@@ -45,7 +45,8 @@ func jpegDecoder(options *Options) func(io.Reader) (image.Image, error) {
 		}
 
 		if mode == types.RGBMode || mode == types.BGRMode {
-			return libjpeg.DecodeIntoRGB(r, decodeOpts)
+      res, err := libjpeg.DecodeIntoRGB(r, decodeOpts)
+			return &types.RGBImage{res.Pix, res.Stride, res.Rectangle}
 		}
 		return libjpeg.Decode(r, decodeOpts)
 	}
@@ -70,7 +71,8 @@ func getDecoder(format string, options *Options) (func(io.Reader) (image.Image, 
 				// DisableBlockSmoothing:  true,
 			}
 			if mode == types.RGBMode || mode == types.BGRMode {
-				return libjpeg.DecodeIntoRGB(r, decodeOpts)
+        res, err := libjpeg.DecodeIntoRGB(r, decodeOpts)
+        return &types.RGBImage{res.Pix, res.Stride, res.Rectangle}
 			}
 			return libjpeg.Decode(r, decodeOpts)
 		}, nil
