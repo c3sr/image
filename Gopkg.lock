@@ -82,56 +82,58 @@
   version = "v0.0.3"
 
 [[projects]]
-  branch = "master"
-  digest = "1:3e3f58d4204ffe581c8bf7140026b17cfa55704e2e4f534398a234a19bd08af1"
+  digest = "1:b361cb418fa9e2e100ed6639ad998f24458fd5a620a2225ea14d4f73d99040bf"
   name = "github.com/c3sr/config"
   packages = ["."]
   pruneopts = "UT"
-  revision = "e9d07ff805c35518081968c3cdb61e2a452cacff"
+  revision = "35ed8e2450bf72580413486a801a469faeb04189"
+  version = "v0.1.0"
 
 [[projects]]
-  branch = "master"
   digest = "1:353763fa30b562e20c07d7f31cf962ab53feb737e98fdf230f062265c188fef2"
   name = "github.com/c3sr/cpu"
   packages = ["cpuid"]
   pruneopts = "UT"
-  revision = "47f0c73e5808d72263a55355b19812dac907571f"
+  revision = "d7c85a1d3ded6cdac166c230b6b84d01520f78fa"
+  version = "v0.1.0"
 
 [[projects]]
-  branch = "master"
-  digest = "1:91d1b63abd2c437e38305cefa5ed9863a6536bf88a8503d7ef8015df1ab8baed"
+  digest = "1:e8f10256accea12de0e0825ad5106c294f6085a2dc0c0b545d7d45589150f23f"
   name = "github.com/c3sr/go-libjpeg"
-  packages = ["."]
+  packages = [
+    ".",
+    "rgb",
+  ]
   pruneopts = "UT"
-  revision = "ffa9af4b2a560dfb0362456bb1b338ca327e04b1"
+  revision = "dc75e6267f09116917ff331ba4ed8fe10e540fae"
+  version = "v0.1.0"
 
 [[projects]]
-  branch = "master"
-  digest = "1:fee881074ab4b9858f916e89041fcd6db2c8046ebdb1faf3238b79d5d8b6394c"
+  digest = "1:46ce66a3ae9e492940d76b6da51c79650bd8874e92f42a8fca2d912d5b6472a4"
   name = "github.com/c3sr/logger"
   packages = ["."]
   pruneopts = "UT"
-  revision = "3a1b4f2fe0a8cff889e1ee8fbda6967bd9c0d550"
+  revision = "159591d2749003f68b0dacfadf03ab90a18f66c1"
+  version = "v0.1.0"
 
 [[projects]]
-  branch = "master"
   digest = "1:e7125b75b38b4fc4543a318d2b5a4fc7a7f57afef38d2d03986340b27d40b812"
   name = "github.com/c3sr/machine"
   packages = ["os"]
   pruneopts = "UT"
-  revision = "6628880864ba48724ca5f7b63fe9995d4c5f3689"
+  revision = "96aea5331fe77b9d53c90a5b58b3a12ceb46cea7"
+  version = "v0.1.0"
 
 [[projects]]
-  branch = "master"
-  digest = "1:6c8f7f7333bc8f2ddcb25508dea709fb817491f6cb4b8d10a2844e31652cce00"
+  digest = "1:4f4be42ea97b60c7f4a9ffbef06f462af9505bcace5177c9ccdf6191737a06a0"
   name = "github.com/c3sr/nvml-go"
   packages = ["."]
   pruneopts = "UT"
-  revision = "c893af65d8c554dae557672dc257f3849a1435db"
+  revision = "54dd66e81b09c73bb3ee3b74b0befd6dbbf78740"
+  version = "v0.2.0"
 
 [[projects]]
-  branch = "master"
-  digest = "1:0cf105d8fc35e34667e6b17cebf1dcf51c70d5e7daa191e85e0995e65a1fe97a"
+  digest = "1:29d68d2ac174b55906226bccfe905dba24a7f01282b54161c69167df0420b722"
   name = "github.com/c3sr/tracer"
   packages = [
     ".",
@@ -141,31 +143,32 @@
     "utils",
   ]
   pruneopts = "UT"
-  revision = "43da420e1ef6bf956c8dfd78d3cce306c1cfa781"
+  revision = "5aa2b32716b83fd736644a94b13fea619d073ba8"
+  version = "v0.3.0"
 
 [[projects]]
-  branch = "master"
-  digest = "1:76f07a4f650254ba509f97107408ba2d3923f21490ed983fdd3d79e8c6b7838b"
+  digest = "1:445b0d82fc1eb84f8c675757c6785021d8992c180c3c62e9ad30434b93c56500"
   name = "github.com/c3sr/utils"
   packages = ["."]
   pruneopts = "UT"
-  revision = "1131f94737fa162c7abd799d49e0e61d28827bd7"
+  revision = "8c94d0bf9baa1095effd041da69653e1103b68c7"
+  version = "v0.1.0"
 
 [[projects]]
-  branch = "master"
-  digest = "1:c7c5356462640cb1ce5337a7f48991bcdfa7f768af0037f40f7dc3b5433e56fe"
+  digest = "1:bec8d02ce7d7bd43c3ff435b71c6f75ab3e6ac35b69b50f457f8b3acfab11d17"
   name = "github.com/c3sr/uuid"
   packages = ["."]
   pruneopts = "UT"
-  revision = "16bb3b3c5514e4f48dc6740cd05a6e0b55a56353"
+  revision = "97e22344270854c12f76eb69850d917025368add"
+  version = "v0.1.0"
 
 [[projects]]
-  branch = "master"
-  digest = "1:da993593fb42403a3695f952e3666346fc3b510862c3a1086006c7566fa004b9"
+  digest = "1:77555ff63552bbfc1b00aa018fb013e76256d70764ded9cd5a1dad891a740681"
   name = "github.com/c3sr/vipertags"
   packages = ["."]
   pruneopts = "UT"
-  revision = "c54404b591155101716768833b5eee64aca9a3cd"
+  revision = "b8a9fd68c520fe07ffbf7f642b7e73eac2a0434f"
+  version = "v0.1.0"
 
 [[projects]]
   digest = "1:f438d91be142877c3ad83157992c91de787ddfbddcc2a7da1ef6ef61606cadc4"

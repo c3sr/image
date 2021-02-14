@@ -38,24 +38,24 @@
   name = "github.com/bamiaux/rez"
 
 [[constraint]]
-  branch = "master"
   name = "github.com/c3sr/config"
+  version = "0.1.0"
 
 [[constraint]]
-  branch = "master"
   name = "github.com/c3sr/cpu"
+  version = "0.1.0"
 
 [[constraint]]
-  branch = "master"
   name = "github.com/c3sr/go-libjpeg"
+  version = "0.1.0"
 
 [[constraint]]
-  branch = "master"
   name = "github.com/c3sr/logger"
+  version = "0.1.0"
 
 [[constraint]]
-  branch = "master"
   name = "github.com/c3sr/tracer"
+  version = "0.3.0"
 
 [[constraint]]
   name = "github.com/disintegration/imaging"
