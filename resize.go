@@ -31,17 +31,40 @@ func intMax(a, b int) int {
 	return b
 }
 
+func intMin(a, b int) int {
+	if a < b {
+		return a
+	}
+	return b
+}
+
 func computeScaledDimension(inputImage types.Image, opts *Options) (int, int) {
-	if opts.maxDimension == nil {
+	if opts.maxDimension == nil && opts.minDimension == nil {
 		return 0, 0
 	}
-	maxDimension := *opts.maxDimension
-	imgWidth, imgHeight := inputImage.Bounds().Dx(), inputImage.Bounds().Dy()
-	if opts.keepAspectRatio == nil || *opts.keepAspectRatio == false {
-		return intMax(imgWidth, maxDimension), intMax(imgHeight, maxDimension)
+
+	if opts.maxDimension != nil && opts.minDimension != nil {
+		return 0, 0
 	}
 
-	resizeRatio := float32(maxDimension) / float32(intMax(imgWidth, imgHeight))
+	imgWidth, imgHeight := inputImage.Bounds().Dx(), inputImage.Bounds().Dy()
+
+	var resizeRatio float32
+
+	if opts.maxDimension != nil {
+		maxDimension := *opts.maxDimension
+		if opts.keepAspectRatio == nil || *opts.keepAspectRatio == false {
+			return intMax(imgWidth, maxDimension), intMax(imgHeight, maxDimension)
+		}
+		resizeRatio = float32(maxDimension) / float32(intMax(imgWidth, imgHeight))
+	} else {
+		minDimension := *opts.minDimension
+		if opts.keepAspectRatio == nil || *opts.keepAspectRatio == false {
+			return intMin(imgWidth, minDimension), intMin(imgHeight, minDimension)
+		}
+		resizeRatio = float32(minDimension) / float32(intMin(imgWidth, imgHeight))
+	}
+
 	width := int(resizeRatio * float32(imgWidth))
 	height := int(resizeRatio * float32(imgHeight))
 
@@ -62,7 +85,7 @@ func Resize(inputImage types.Image, opts ...Option) (types.Image, error) {
 		targetHeight = srcHeight
 	}
 
-	if options.maxDimension != nil {
+	if options.maxDimension != nil || options.minDimension != nil {
 		targetWidth, targetHeight = computeScaledDimension(inputImage, options)
 	}
 
