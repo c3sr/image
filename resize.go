@@ -2,6 +2,7 @@ package image
 
 import (
 	"image"
+	"math"
 
 	opentracing "github.com/opentracing/opentracing-go"
 	"github.com/pkg/errors"
@@ -65,8 +66,8 @@ func computeScaledDimension(inputImage types.Image, opts *Options) (int, int) {
 		resizeRatio = float32(minDimension) / float32(intMin(imgWidth, imgHeight))
 	}
 
-	width := int(resizeRatio * float32(imgWidth))
-	height := int(resizeRatio * float32(imgHeight))
+	width := int(math.Round(float64(resizeRatio * float32(imgWidth))))
+	height := int(math.Round(float64(resizeRatio * float32(imgHeight))))
 
 	return width, height
 }
