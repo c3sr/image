@@ -69,7 +69,7 @@ func (p *BGRImage) SetBGR(x, y int, c BGR) {
 
 // SubImage returns an image representing the portion of the image p visible
 // through r. The returned value shares pixels with the original image.
-func (p *BGRImage) SubImage(r image.Rectangle) Image {
+func (p *BGRImage) SubImage(r image.Rectangle) image.Image {
 	r = r.Intersect(p.Rect)
 	// If r1 and r2 are Rectangles, r1.Intersect(r2) is not guaranteed to be inside
 	// either r1 or r2 if the intersection is empty. Without explicitly checking for
