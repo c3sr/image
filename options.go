@@ -12,6 +12,7 @@ type Options struct {
 	resizeHeight    int
 	resizeAlgorithm types.ResizeAlgorithm
 	maxDimension    *int
+	minDimension    *int
 	keepAspectRatio *bool
 	mode            types.Mode
 	mean            [3]float32
@@ -62,6 +63,12 @@ func MaxDimension(dim int) Option {
 	}
 }
 
+func MinDimension(dim int) Option {
+	return func(o *Options) {
+		o.minDimension = &dim
+	}
+}
+
 func ResizeAlgorithm(alg types.ResizeAlgorithm) Option {
 	return func(o *Options) {
 		o.resizeAlgorithm = alg
@@ -106,6 +113,7 @@ func NewOptions(opts ...Option) *Options {
 	options := &Options{
 		mean:            [3]float32{0, 0, 0},
 		maxDimension:    nil,
+		minDimension:    nil,
 		keepAspectRatio: nil,
 		mode:            types.RGBMode,
 		layout:          HWCLayout,
